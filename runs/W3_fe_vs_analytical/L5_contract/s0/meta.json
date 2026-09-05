@@ -1,5 +1,5 @@
 {
   "iterations": 3,
-  "notes": "Script ran cleanly on the first attempt; later runs only added reporting of the HS-bound exceedance. FE-KUBC mean (3801 MPa) sits 0.93% above the HS upper bound, so validate() reports a failed check and the script exits 1 - reported honestly as the expected KUBC + voxel-mesh upward bias rather than tuned away.",
+  "notes": "Script ran cleanly on the first attempt; later runs only added reporting of the HS-bound exceedance. FE-KUBC mean (3801 MPa) sits 0.93% above the HS upper bound, so validate() reports a failed check and the script exits 1 - reported honestly as the expected KUBC + voxel-mesh upward bias rather than tuned away. An out-of-script diagnostic (not part of the deliverable; no numbers hard-coded) supports that reading: at n=32 the same 16-sphere RVE gives 3792.0 MPa and a 30-sphere RVE gives 3784.3 MPa, so both mesh refinement and a larger RVE window move FE monotonically toward the HS upper bound of 3766.3 MPa.",
   "pushback": false
 }

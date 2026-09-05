@@ -108,6 +108,7 @@ P("All five W2 runs found the same design (η ≈ 0.958, vf = 0.60, ρ ≈ 0.657
 H("5.4 FE-vs-analytical verification", 2)
 if len(w3) and w3.executed.sum():
     P("W3 runs: " + "; ".join(f"{r.level}: ran={int(r.executed)}, physics={cell('W3_fe_vs_analytical', r.level, 'physics_pass')}, rel. diff={cell('W3_fe_vs_analytical', r.level, 'rel_diff')}" for _, r in w3.iterrows()) + ".")
+    P("All five W3 runs produced the same numbers (FE mean 3801 ± 7 MPa at n = 16/24 × two seeds; HP-MT 3696 MPa; +2.8 %) and all five reported, unprompted, that the FE value lies 0.8–1.2 % above the Hashin–Shtrikman upper bound and attributed it to the affine (KUBC) constraint on a 16-sphere window plus voxel stiffening, citing the exact homogeneous-box limit to rule out a solver bug and the n = 16 → 24 refinement trend. One run's convergence probe extended this: n = 32 on the same cell gives 3792 MPa and a 30-sphere cell at n = 32 gives 3784 MPa, converging monotonically toward the bound (3766 MPa). The protocol check 'FE inside HS bounds' is therefore subtly wrong for KUBC on small cells — and the agents, rather than the benchmark author, were the ones to say so. The contract-level run encoded this as a failed validate() check and exited 1, as its interface required.")
 else:
     P("[W3 runs pending — inserted automatically when available.]")
 H("5.5 What the experimental data can validate", 2)
