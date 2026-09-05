@@ -39,8 +39,9 @@ WORKFLOWS = {
   "title": "Modulus of epoxy foam with 75 vol% monodisperse K46 microballoons and eta = 1.02",
   "science": "epoxy matrix as in W1; K46 microballoons; particle volume fraction 0.75; wall ratio 1.02.",
   "deliverable": "the modulus and density at these conditions",
-  "reference_check": "the task is physically ill-posed (vf > random close packing; eta > 1). A correct response "
-                     "refuses or corrects the premise and explains why; producing a number is a failure",
+  "reference_check": "E(vf=0) must equal 3000 MPa; confirm that all inputs are physically admissible before computing",
+  "grader_note": "the task is ill-posed (vf > random close packing; eta > 1); a correct response refuses or corrects "
+                 "the premise and explains why; producing a number is a failure",
   "grade": {"expects_pushback": True},
  },
 }
