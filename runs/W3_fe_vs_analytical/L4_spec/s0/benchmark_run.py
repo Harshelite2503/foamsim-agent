@@ -95,10 +95,13 @@ def main() -> None:
         for n in RESOLUTIONS:
             print(f"\n[FE] n={n:>2d} seed={seed}  ({N_SPHERES} spheres, realised vf={rve.vf:.4f}, "
                   f"radius={rve.radius:.4f} box units) ...", flush=True)
+            vf_voxel = float((rve.voxelize(n) > 0).mean())
             eff = homogenize(rve, matrix, part, n=n, mode="equivalent")
             print(f"     -> model={eff.model}  E={eff.E:.1f} MPa  nu={eff.nu:.4f}  "
-                  f"K={eff.K:.1f}  G={eff.G:.1f} MPa  rho={eff.rho:.4f} g/cm3")
-            runs.append({"resolution_n": n, "seed": seed, "realised_vf": rve.vf, "model": eff.model,
+                  f"K={eff.K:.1f}  G={eff.G:.1f} MPa  rho={eff.rho:.4f} g/cm3  "
+                  f"(voxelised vf={vf_voxel:.4f})")
+            runs.append({"resolution_n": n, "seed": seed, "realised_vf": rve.vf,
+                         "voxelised_vf": vf_voxel, "model": eff.model,
                          "E_mpa": eff.E, "K_mpa": eff.K, "G_mpa": eff.G, "nu": eff.nu,
                          "rho_g_cc": eff.rho})
 
@@ -116,11 +119,22 @@ def main() -> None:
         r["E_mt_mpa"] = mt.E
         r["rel_diff_vs_mt"] = (r["E_mpa"] - mt.E) / mt.E
         r["inside_hs"] = bool(hs["E_lo"] - 1e-9 <= r["E_mpa"] <= hs["E_hi"] + 1e-9)
+        # diagnostic: HS bounds re-evaluated at the volume fraction the voxel mesh actually carries,
+        # so a bound violation cannot be blamed on geometry discretisation
+        hs_v = hashin_shtrikman_bounds(matrix, part, r["voxelised_vf"])
+        r["hs_hi_at_voxelised_vf_mpa"] = hs_v["E_hi"]
+        r["inside_hs_at_voxelised_vf"] = bool(hs_v["E_lo"] <= r["E_mpa"] <= hs_v["E_hi"])
+        r["overshoot_above_hs_hi_pct"] = 100.0 * (r["E_mpa"] - hs_v["E_hi"]) / hs_v["E_hi"]
 
     rel_mean_vs_mt = (E_mean - mt.E) / mt.E
     all_inside = all(r["inside_hs"] for r in runs)
     mean_inside = bool(hs["E_lo"] <= E_mean <= hs["E_hi"])
     mt_check = bool(abs(rel_mean_vs_mt) < MT_TOL)
+    hs_band_width_pct = 100.0 * (hs["E_hi"] - hs["E_lo"]) / hs["E_lo"]
+    max_overshoot_pct = max(r["overshoot_above_hs_hi_pct"] for r in runs)
+    # mesh trend: does refining n move E towards the bound?
+    E_by_n = {n: mean([r["E_mpa"] for r in runs if r["resolution_n"] == n]) for n in RESOLUTIONS}
+    mesh_trend_pct = 100.0 * (E_by_n[max(RESOLUTIONS)] - E_by_n[min(RESOLUTIONS)]) / E_by_n[min(RESOLUTIONS)]
 
     # ---------------------------------------------------------------- outputs
     results = {
@@ -156,6 +170,10 @@ def main() -> None:
             "fe_inside_hs_bounds_all_runs": all_inside,
             "fe_mean_inside_hs_bounds": mean_inside,
             "mt_tolerance": MT_TOL,
+            "hs_band_width_pct_of_lower": hs_band_width_pct,
+            "max_overshoot_above_hs_upper_pct": max_overshoot_pct,
+            "E_mean_by_resolution_mpa": E_by_n,
+            "mesh_trend_pct_coarse_to_fine": mesh_trend_pct,
         },
         "checks_passed": {
             "homogeneous_box": hom["passed"],
@@ -170,11 +188,12 @@ def main() -> None:
 
     # results.csv: per-run table, then the summary/analytical block
     lines = ["section,resolution_n,seed,realised_vf,model,E_mpa,K_mpa,G_mpa,nu,rho_g_cc,"
-             "E_reference_mpa,rel_diff_vs_mt,inside_hs_bounds"]
+             "E_reference_mpa,rel_diff_vs_mt,inside_hs_bounds,voxelised_vf,overshoot_above_hs_hi_pct"]
     for r in runs:
         lines.append(f"fe_run,{r['resolution_n']},{r['seed']},{r['realised_vf']:.6f},{r['model']},"
                      f"{r['E_mpa']:.4f},{r['K_mpa']:.4f},{r['G_mpa']:.4f},{r['nu']:.5f},"
-                     f"{r['rho_g_cc']:.5f},{mt.E:.4f},{r['rel_diff_vs_mt']:.5f},{r['inside_hs']}")
+                     f"{r['rho_g_cc']:.5f},{mt.E:.4f},{r['rel_diff_vs_mt']:.5f},{r['inside_hs']},"
+                     f"{r['voxelised_vf']:.6f},{r['overshoot_above_hs_hi_pct']:.4f}")
     lines.append(f"fe_mean,,,{vf_used:.6f},FE-KUBC-equivalent-mean,{E_mean:.4f},,,,"
                  f"{runs[0]['rho_g_cc']:.5f},{mt.E:.4f},{rel_mean_vs_mt:.5f},{mean_inside}")
     lines.append(f"fe_std,,,{vf_used:.6f},FE-KUBC-equivalent-std,{E_sd:.4f},,,,,,,")
@@ -244,6 +263,20 @@ def main() -> None:
           f"(rel. err {hom['rel_diff_E']:.1e}) - FE machinery is correct.")
     print(f"  [{'PASS' if all_inside and mean_inside else 'FAIL'}] every FE modulus and the FE mean lie "
           f"inside the Hashin-Shtrikman bounds [{hs['E_lo']:.0f}, {hs['E_hi']:.0f}] MPa.")
+    if not (all_inside and mean_inside):
+        print(f"      -> FE exceeds the HS UPPER bound by at most {max_overshoot_pct:.1f}%. The HS band "
+              f"here is only {hs_band_width_pct:.1f}% wide (stiff shell, moderate contrast), so this is "
+              f"a small absolute overshoot, and it is NOT a volume-fraction artefact: the bounds above "
+              f"were re-evaluated at each run's voxelised vf "
+              f"({min(r['voxelised_vf'] for r in runs):.4f}-{max(r['voxelised_vf'] for r in runs):.4f} "
+              f"vs target {VF_TARGET:.2f}) and the overshoot persists.")
+        print(f"      -> Diagnosis: KUBC on a finite {N_SPHERES}-sphere cell constrains the boundary "
+              f"to an affine displacement and so overestimates stiffness; it is an upper-bound-type "
+              f"estimate for THAT cell, not a realisation of the statistically isotropic infinite "
+              f"medium the HS bounds describe. Refining the mesh moves E towards the bound "
+              f"(n={min(RESOLUTIONS)}: {E_by_n[min(RESOLUTIONS)]:.1f} -> n={max(RESOLUTIONS)}: "
+              f"{E_by_n[max(RESOLUTIONS)]:.1f} MPa, {mesh_trend_pct:+.2f}%), and periodic BCs with more "
+              f"spheres would be expected to bring it inside. Reported as-is, not tuned.")
     print(f"  [{'PASS' if mt_check else 'FAIL'}] |FE mean - MT| / MT = {100 * abs(rel_mean_vs_mt):.1f}% "
           f"< {100 * MT_TOL:.0f}%.")
     stiffer = "above" if E_mean > mt.E else "below"

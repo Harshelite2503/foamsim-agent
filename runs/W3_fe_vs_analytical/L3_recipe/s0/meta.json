@@ -1,0 +1,5 @@
+{
+  "iterations": 2,
+  "notes": "FE KUBC homogenization (mode='equivalent') of epoxy/K46 at vf=0.30 over n=16,24 x seeds 0,1, vs HP-MT and HS bounds; homogeneous-box self-check exact to 1e-16. First run aborted on the 'FE inside HS bounds' assertion: FE exceeds the HS upper bound in E by 0.93% (G by 1.07%; K matches the coincident HS K bounds exactly). Diagnosed as KUBC finite-RVE + voxelisation bias (shrinks 1.08% -> 0.78% from n=16 to n=24), not a solver bug, and reported as a failed check rather than tuned away.",
+  "pushback": true
+}

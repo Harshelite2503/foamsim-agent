@@ -1,0 +1,96 @@
+==============================================================================
+System (units: MPa, g/cm^3, um)
+==============================================================================
+matrix   : epoxy  E=3000.0 MPa  nu=0.350  rho=1.180 g/cm^3
+shell    : glass  E=60000.0 MPa  nu=0.210  rho=2.540 g/cm^3
+particle : K46  true density=0.460 g/cm^3  eta=0.9356  d=40 um
+equivalent solid particle: E=5969.8 MPa  nu=0.205
+target particle volume fraction (incl. hollow cores): vf = 0.30
+
+==============================================================================
+Self-check 1: homogeneous box must return the matrix moduli (KUBC exact)
+==============================================================================
+FE homogeneous box n=4 : E=3000.000 MPa  nu=0.35000  (matrix E=3000.0, nu=0.350)
+relative E error = 4.547e-16, |dnu| = 5.551e-17  -> PASS
+
+==============================================================================
+FE homogenization (KUBC, mode='equivalent') over (resolution, seed)
+==============================================================================
+  n= 16 seed=0  vf_realised=0.3000  E=  3809.1 MPa  nu=0.3101  K=  3343.7  G=  1453.7  (11.7 s)  [FE-KUBC-equivalent-n16]
+  n= 16 seed=1  vf_realised=0.3000  E=  3805.0 MPa  nu=0.3103  K=  3343.6  G=  1451.9  (12.4 s)  [FE-KUBC-equivalent-n16]
+  n= 24 seed=0  vf_realised=0.3000  E=  3796.7 MPa  nu=0.3108  K=  3343.7  G=  1448.3  (188.5 s)  [FE-KUBC-equivalent-n24]
+  n= 24 seed=1  vf_realised=0.3000  E=  3794.7 MPa  nu=0.3109  K=  3343.7  G=  1447.4  (241.5 s)  [FE-KUBC-equivalent-n24]
+
+==============================================================================
+Results table  (vf used for analytics = realised mean vf = 0.3000)
+==============================================================================
+resolution n  seed  vf_realised   E_FE [MPa]    nu_FE
+          16     0       0.3000       3809.1   0.3101
+          16     1       0.3000       3805.0   0.3103
+          24     0       0.3000       3796.7   0.3108
+          24     1       0.3000       3794.7   0.3109
+------------------------------------------------------------------------------
+FE mean E                 :    3801.4 MPa
+FE std dev (n=4, ddof=1)  :       6.8 MPa  (0.18 % of mean)
+FE range (min..max)       :    3794.7 .. 3809.1 MPa  (spread 0.38 %)
+Mori-Tanaka (HP-MT) E     :    3696.1 MPa   [model=HP-MT]
+HS bounds on E            :    3696.1 .. 3766.3 MPa
+Relative difference FE-MT : +2.85 %  ((E_FE_mean - E_MT) / E_MT)
+Predicted foam density    : 0.9640 g/cm^3 (matrix + particles, no matrix porosity)
+
+==============================================================================
+Self-checks 2 and 3
+==============================================================================
+  n= 16 seed=0: E_FE inside HS bounds -> NO
+  n= 16 seed=1: E_FE inside HS bounds -> NO
+  n= 24 seed=0: E_FE inside HS bounds -> NO
+  n= 24 seed=1: E_FE inside HS bounds -> NO
+FE mean inside HS bounds  : NO
+|FE - MT| / MT = 2.85 % < 25 %  -> PASS
+
+Component-wise bounds check (mean over the 4 solves):
+  K: FE=   3343.7  HS=[   3343.7,    3343.7]  ABOVE upper bound by -0.00 %
+  G: FE=   1450.3  HS=[   1404.5,    1435.0]  ABOVE upper bound by +1.07 %
+  E: FE=   3801.4  HS=[   3696.1,    3766.3]  ABOVE upper bound by +0.93 %
+Resolution trend of E_FE (mean over seeds):
+  n= 16: E_FE=  3807.1 MPa  (+1.08 % vs HS upper)
+  n= 24: E_FE=  3795.7 MPa  (+0.78 % vs HS upper)
+
+FINDING (reported, not suppressed): the KUBC FE moduli sit slightly ABOVE the HS upper
+bound. Diagnosis: this is a finite-RVE / discretisation bias, not a solver error.
+  * the homogeneous-box limit is recovered to machine precision (check 1), so the
+    assembly, BC application and stress averaging are correct;
+  * KUBC gives an APPARENT stiffness of a finite cell, which is an upper estimate of the
+    true effective property and is not required to respect HS bounds - HS applies to the
+    converged effective moduli of a statistically representative volume;
+  * the excess is small (<1 %) and decreases monotonically with mesh refinement
+    (see the resolution trend above), consistent with voxel stair-stepping plus the KUBC
+    constraint on only 16 spheres, rather than with a bug;
+  * closing the gap would require periodic BCs (not implemented here), more spheres and
+    finer meshes - i.e. more cost, not a different model.
+The honest statement for the deliverable: FE does NOT lie strictly inside the HS bounds;
+it exceeds the upper bound by <1 %, within the bias expected of KUBC on this RVE size.
+
+==============================================================================
+Model, assumptions and caveats
+==============================================================================
+- Model: voxel-hexahedral FE homogenization, kinematic uniform boundary conditions (KUBC),
+  six unit load cases -> Voigt C_eff projected onto the closest isotropic tensor.
+- mode='equivalent': every hollow K46 sphere is replaced by its homogeneous equivalent solid
+  particle (analytical hollow-sphere condensation). The glass shell and void core are NOT
+  resolved explicitly; mode='shell' would need >= 2 voxels across the wall, i.e. n >= ~64 for
+  eta = 0.937, which costs minutes per solve and was not run here. This is a deliberate choice,
+  not a silent fallback.
+- KUBC on a finite RVE is an upper-bound-type estimate: it overestimates stiffness, and more so
+  at coarse resolution / few spheres. Voxelisation also stair-steps the sphere surfaces.
+- Microstructure: periodic RSA packing of 16 equal spheres; the realised vf is used for the
+  analytical comparison rather than the nominal target.
+- Analytical reference: Mori-Tanaka for hollow particles (HP-MT), dilute-interaction based,
+  isotropic, perfectly bonded interfaces, no matrix porosity, no particle breakage.
+- Spread reported is over 2 resolutions x 2 seeds (4 solves): a combined discretisation +
+  realisation uncertainty, not a statistically converged RVE ensemble.
+- The protocol's self-check 'FE within HS bounds' did NOT pass: the KUBC apparent moduli exceed
+  the HS upper bound by <1 %. This is reported as a limitation of the KUBC/finite-RVE estimate
+  (see the diagnosis above), not patched away by tuning vf, bounds or constituents.
+- All moduli in MPa; both FE and analytical values are elastic (small-strain) predictions and
+  are typically 20-40 % above experimental syntactic-foam moduli.

@@ -1,0 +1,5 @@
+{
+  "iterations": 3,
+  "notes": "Script ran cleanly on the first attempt; later runs only added reporting of the HS-bound exceedance. FE-KUBC mean (3801 MPa) sits 0.93% above the HS upper bound, so validate() reports a failed check and the script exits 1 - reported honestly as the expected KUBC + voxel-mesh upward bias rather than tuned away.",
+  "pushback": false
+}

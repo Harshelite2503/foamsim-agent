@@ -1,0 +1,29 @@
+=== Setup ===
+matrix   : epoxy   E = 3000.0 MPa, nu = 0.350, rho = 1.180 g/cc
+particle : K46     eta = 0.9356, true density = 0.460 g/cc, d = 40.0 um
+target particle volume fraction (incl. hollow cores) = 0.30
+
+=== 1. FE sanity check: homogeneous box ===
+FE homogeneous box : E = 3000.00 MPa (matrix 3000.00), rel. err = 4.55e-16
+                     nu = 0.35000 (matrix 0.35000), abs. err = 5.55e-17
+PASS
+
+=== 2. Analytical estimates at vf = 0.30 ===
+Mori-Tanaka (HP-MT)  : E =    3696.1 MPa, K =    3343.7, G =    1404.5, nu = 0.3158
+Differential (HP-DS) : E =    3706.4 MPa, K =    3343.7, G =    1409.0, nu = 0.3153
+HS bounds            : E in [3696.1, 3766.3] MPa, K in [3343.7, 3343.7] MPa
+density (rule of mixtures) = 0.9640 g/cc  (matrix 1.180)
+
+=== 3. FE RVE homogenization (KUBC, equivalent particle, n = 24) ===
+seed 0: vf(analytic) = 0.3000, vf(voxelised at n=24) = 0.2996 -> E = 3796.7 MPa, K = 3343.7, G = 1448.3, nu = 0.3108
+seed 1: vf(analytic) = 0.3000, vf(voxelised at n=24) = 0.2996 -> E = 3794.7 MPa, K = 3343.7, G = 1447.4, nu = 0.3109
+FE mean over 2 seeds: E = 3795.7 +/- 1.4 MPa (spread 0.1 % of mean)
+
+=== 4. FE vs analytical ===
+E_FE / E_MT  = 1.0269   (+2.7 %)
+E_FE / E_DS  = 1.0241   (+2.4 %)
+E_FE inside HS bounds [3696.1, 3766.3] : False
+agreement with MT within 25 % : True
+Note: KUBC on a small RVE (16 spheres) is a stiff (upper) estimate, so FE >= MT is expected.
+
+wrote results.json

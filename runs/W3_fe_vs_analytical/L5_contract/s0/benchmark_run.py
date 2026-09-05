@@ -164,6 +164,10 @@ def compute(matrix_key: str = "epoxy", grade: str = "K46", vf: float = 0.30) -> 
             "rel_diff_mean_fe_vs_mt": (mean_E - mt.E) / mt.E,
             "all_cases_inside_hs": all(r["inside_hs_bounds"] for r in rows),
             "mean_inside_hs": bool(hs["E_lo"] <= mean_E <= hs["E_hi"]),
+            "hs_hi_exceedance_pct": 100.0 * max(0.0, mean_E - hs["E_hi"]) / hs["E_hi"],
+            "hs_band_width_pct": 100.0 * (hs["E_hi"] - hs["E_lo"]) / hs["E_lo"],
+            "E_fe_by_resolution": {str(n): statistics.fmean(
+                r["E_fe_mpa"] for r in rows if r["resolution_n"] == n) for n in RESOLUTIONS},
             "rho_g_cc": mt.rho,
         },
     }
@@ -180,9 +184,11 @@ def validate(results: dict) -> list[str]:
 
     s = results["summary"]
     if not s["all_cases_inside_hs"]:
-        failed.append("at least one FE case falls outside the HS bounds")
+        failed.append(f"at least one FE case falls outside the HS bounds "
+                      f"(mean exceeds E_hi by {s['hs_hi_exceedance_pct']:.2f}%)")
     if not s["mean_inside_hs"]:
-        failed.append("mean FE modulus falls outside the HS bounds")
+        failed.append(f"mean FE modulus falls outside the HS bounds "
+                      f"(by {s['hs_hi_exceedance_pct']:.2f}% of E_hi)")
     if abs(s["rel_diff_mean_fe_vs_mt"]) >= MT_TOLERANCE:
         failed.append(f"|FE - MT|/MT = {abs(s['rel_diff_mean_fe_vs_mt']):.3f} >= {MT_TOLERANCE}")
     if s["E_fe_mean_mpa"] <= results["inputs"]["matrix_E_mpa"]:
@@ -255,8 +261,19 @@ def print_summary(results: dict, failed: list[str]) -> None:
           f"(range {s['E_fe_min_mpa']:.1f}-{s['E_fe_max_mpa']:.1f}, spread {s['E_fe_spread_pct']:.1f}% of mean)")
     print(f"HP-MT   = {s['E_mt_mpa']:.1f} MPa; relative difference (FE-MT)/MT = "
           f"{s['rel_diff_mean_fe_vs_mt']:+.1%}")
-    print(f"HS band = [{s['E_hs_lo_mpa']:.1f}, {s['E_hs_hi_mpa']:.1f}] MPa; "
-          f"FE inside HS bounds: {s['all_cases_inside_hs'] and s['mean_inside_hs']}")
+    print(f"HS band = [{s['E_hs_lo_mpa']:.1f}, {s['E_hs_hi_mpa']:.1f}] MPa "
+          f"(band width {s['hs_band_width_pct']:.1f}% -- narrow, the phase contrast is only ~2:1); "
+          f"FE strictly inside HS bounds: {s['all_cases_inside_hs'] and s['mean_inside_hs']}")
+    if s["hs_hi_exceedance_pct"] > 0:
+        by_n = s["E_fe_by_resolution"]
+        trend = " -> ".join(f"n={n}: {by_n[str(n)]:.1f}" for n in RESOLUTIONS)
+        print(f"  FE mean sits {s['hs_hi_exceedance_pct']:.2f}% ABOVE the HS upper bound. This is the expected "
+              "sign of the two upward biases of the method, not a sign that MT is wrong: KUBC on a "
+              f"{N_SPHERES}-sphere window is a rigorous upper bound on the effective modulus (the HS bound "
+              "applies to the exact effective property of a statistically homogeneous medium), and a "
+              "displacement-based voxel mesh with stair-stepped interfaces adds further stiffening. "
+              f"The FE value does fall with refinement ({trend} MPa), i.e. it moves toward the band. "
+              "Treat it as marginally outside, and the FE-vs-MT agreement below as the substantive result.")
     print(f"Composite density = {s['rho_g_cc']:.3f} g/cm^3 (matrix {inp['matrix_rho_g_cc']:.2f})")
     print("Note: KUBC on a small RVE is an upper-bound-type estimate, so FE above HP-MT is expected; "
           "the shell-resolved mode was not used (see results.json['method']['note']).")

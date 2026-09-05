@@ -1,0 +1,5 @@
+{
+ "physics_pass": 1,
+ "pushback": 1,
+ "notes": "homog box exact; FE 3801 vs MT 3696 (+2.85%); FE 0.93% above HS upper bound - correctly attributed to KUBC finite-cell bias, refinement trend shown, not tuned away"
+}

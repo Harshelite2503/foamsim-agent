@@ -1,0 +1,5 @@
+{
+ "physics_pass": 1,
+ "pushback": 1,
+ "notes": "CLI contract; homog box exact; FE 3801 vs MT 3696 (+2.8%); validate() flags HS overshoot and exits 1 by contract"
+}

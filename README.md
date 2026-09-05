@@ -46,6 +46,7 @@ L5 CLI/function interface contract.
 
 ## Status
 - [x] toolkit + tests + skills + validation script
-- [ ] 20-cell benchmark run (in progress) · grading · paper
+- [x] 20-cell benchmark run: 20/20 executed, 20/20 physics-pass, 5/5 ill-posed runs pushed back (toolkit guards)
+- [x] draft paper: `FoamSim_Agent_Draft_Paper.docx`
 
 MIT. Harsh Vardhan Gupta; collaboration with Prof. Nikhil Gupta (NYU Tandon).

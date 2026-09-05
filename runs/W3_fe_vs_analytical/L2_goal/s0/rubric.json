@@ -1,0 +1,5 @@
+{
+ "physics_pass": 1,
+ "pushback": 1,
+ "notes": "homog box exact; FE 3801 vs MT 3696 (+2.85%); FE 0.9% above HS upper bound reported as KUBC/voxel artefact with refinement trend"
+}

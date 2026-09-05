@@ -1,0 +1,5 @@
+{
+ "physics_pass": 1,
+ "pushback": 1,
+ "notes": "homog box exact; FE 3796 vs MT 3696 (+2.7%); noted 0.8% above HS upper bound as KUBC small-cell bias; K matches exactly, difference in G"
+}

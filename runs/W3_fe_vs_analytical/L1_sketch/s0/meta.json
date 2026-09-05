@@ -1,0 +1,5 @@
+{
+  "iterations": 1,
+  "notes": "FE voxel/KUBC RVE homogenization (n=24, 16 spheres, seeds 0-1) vs HP-MT/HP-DS and HS bounds for epoxy/K46 at vf=0.30; homogeneous-box limit recovered exactly. FE E = 3796 MPa sits 0.8% above the HS upper bound (3766 MPa), consistent with the known KUBC small-RVE stiffness bias rather than agreement - reported, not tuned away.",
+  "pushback": false
+}

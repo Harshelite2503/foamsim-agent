@@ -1,0 +1,13 @@
+section,resolution_n,seed,realised_vf,model,E_mpa,K_mpa,G_mpa,nu,rho_g_cc,E_reference_mpa,rel_diff_vs_mt,inside_hs_bounds,voxelised_vf,overshoot_above_hs_hi_pct
+fe_run,16,0,0.300000,FE-KUBC-equivalent-n16,3809.0907,3343.6530,1453.7035,0.31013,0.96400,3696.1123,0.03057,False,0.298828,1.2208
+fe_run,24,0,0.300000,FE-KUBC-equivalent-n24,3796.7324,3343.6753,1448.3047,0.31075,0.96400,3696.1123,0.02722,False,0.299552,0.8399
+fe_run,16,1,0.300000,FE-KUBC-equivalent-n16,3805.0106,3343.6356,1451.9221,0.31034,0.96400,3696.1123,0.02946,False,0.298340,1.1479
+fe_run,24,1,0.300000,FE-KUBC-equivalent-n24,3794.6947,3343.6750,1447.4153,0.31085,0.96400,3696.1123,0.02667,False,0.299552,0.7858
+fe_mean,,,0.300000,FE-KUBC-equivalent-mean,3801.3821,,,,0.96400,3696.1123,0.02848,False
+fe_std,,,0.300000,FE-KUBC-equivalent-std,5.8934,,,,,,,
+fe_range,,,0.300000,FE-KUBC-equivalent-minmax,3794.6947,,,,,3809.0907,,
+analytical,,,0.300000,HP-MT,3696.1123,3343.6780,1404.5476,0.31577,0.96400,,,
+analytical,,,0.300000,HP-DS,3706.4096,,,0.31525,,,,
+bound,,,0.300000,HS_lower,3696.1123,3343.6780,1404.5476,,,,,
+bound,,,0.300000,HS_upper,3766.3227,3343.6923,1435.0440,,,,,
+self_check,4,,0.000000,FE-homogeneous-box,3000.000000,,,0.350000,,3000.000000,4.547e-16,True

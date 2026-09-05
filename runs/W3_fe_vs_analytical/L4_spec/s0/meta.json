@@ -1,0 +1,5 @@
+{
+  "iterations": 2,
+  "notes": "Ran clean on the first execution; the second run added a diagnostic (HS bounds re-evaluated at each run's voxelised vf, mesh trend) after FE came out ~1% above the HS upper bound. Reported that overshoot honestly as a KUBC finite-RVE effect rather than tuning the setup to make the check pass.",
+  "pushback": false
+}

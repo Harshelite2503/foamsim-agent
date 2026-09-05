@@ -1,0 +1,143 @@
+{
+  "units": {
+    "modulus": "MPa",
+    "density": "g/cm^3",
+    "length": "micrometre",
+    "vf": "dimensionless"
+  },
+  "inputs": {
+    "matrix": "epoxy",
+    "matrix_E_mpa": 3000.0,
+    "matrix_nu": 0.35,
+    "matrix_rho_g_cc": 1.18,
+    "grade": "K46",
+    "particle_true_density_g_cc": 0.45999999999999974,
+    "shell_E_mpa": 60000.0,
+    "shell_nu": 0.21,
+    "shell_rho_g_cc": 2.54,
+    "eta": 0.935570543253382,
+    "equivalent_particle_E_mpa": 5969.8475802159655,
+    "equivalent_particle_nu": 0.2045790643094575,
+    "vf_target": 0.3,
+    "n_spheres": 16,
+    "resolutions": [
+      16,
+      24
+    ],
+    "seeds": [
+      0,
+      1
+    ]
+  },
+  "method": {
+    "fe": "voxel hexahedral FE (scikit-fem), kinematic uniform BCs (KUBC), mode='equivalent'",
+    "analytical": "HP-MT (hollow-particle Mori-Tanaka on the equivalent solid particle)",
+    "bounds": "Hashin-Shtrikman bounds for matrix + equivalent particle",
+    "note": "mode='shell' (explicit glass shell + void core) was NOT used: eta=0.936 would require n >= ~64 voxels for >=2 voxels across the wall.",
+    "kubc_bias": "KUBC over-predicts stiffness for finite RVEs; spread over seeds/resolutions reported."
+  },
+  "self_check_homogeneous_box": {
+    "n": 4,
+    "E_fe_mpa": 2999.9999999999986,
+    "nu_fe": 0.35000000000000003,
+    "E_matrix_mpa": 3000.0,
+    "nu_matrix": 0.35,
+    "rel_err_E": 4.547473508864641e-16,
+    "rel_err_nu": 1.5860328923216522e-16
+  },
+  "cases": [
+    {
+      "resolution_n": 16,
+      "seed": 0,
+      "model": "FE-KUBC-equivalent-n16",
+      "vf_target": 0.3,
+      "vf_realised": 0.3000000000000001,
+      "E_fe_mpa": 3809.090653259322,
+      "K_fe_mpa": 3343.6530027494455,
+      "G_fe_mpa": 1453.7034984806262,
+      "nu_fe": 0.3101332758848305,
+      "rho_g_cc": 0.964,
+      "E_mt_mpa": 3696.1122550388145,
+      "E_hs_lo_mpa": 3696.1122550388145,
+      "E_hs_hi_mpa": 3766.322691098364,
+      "rel_diff_fe_vs_mt": 0.030566820059776893,
+      "inside_hs_bounds": false
+    },
+    {
+      "resolution_n": 24,
+      "seed": 0,
+      "model": "FE-KUBC-equivalent-n24",
+      "vf_target": 0.3,
+      "vf_realised": 0.3000000000000001,
+      "E_fe_mpa": 3796.732370472424,
+      "K_fe_mpa": 3343.6752754222507,
+      "G_fe_mpa": 1448.3047095229456,
+      "nu_fe": 0.3107505435520619,
+      "rho_g_cc": 0.964,
+      "E_mt_mpa": 3696.1122550388145,
+      "E_hs_lo_mpa": 3696.1122550388145,
+      "E_hs_hi_mpa": 3766.322691098364,
+      "rel_diff_fe_vs_mt": 0.027223230381175974,
+      "inside_hs_bounds": false
+    },
+    {
+      "resolution_n": 16,
+      "seed": 1,
+      "model": "FE-KUBC-equivalent-n16",
+      "vf_target": 0.3,
+      "vf_realised": 0.3000000000000001,
+      "E_fe_mpa": 3805.0105968975918,
+      "K_fe_mpa": 3343.6356284702842,
+      "G_fe_mpa": 1451.922092465702,
+      "nu_fe": 0.3103356635464499,
+      "rho_g_cc": 0.964,
+      "E_mt_mpa": 3696.1122550388145,
+      "E_hs_lo_mpa": 3696.1122550388145,
+      "E_hs_hi_mpa": 3766.322691098364,
+      "rel_diff_fe_vs_mt": 0.029462942233510078,
+      "inside_hs_bounds": false
+    },
+    {
+      "resolution_n": 24,
+      "seed": 1,
+      "model": "FE-KUBC-equivalent-n24",
+      "vf_target": 0.3,
+      "vf_realised": 0.3000000000000001,
+      "E_fe_mpa": 3794.6946548209817,
+      "K_fe_mpa": 3343.674953030179,
+      "G_fe_mpa": 1447.4152600811685,
+      "nu_fe": 0.3108520959659436,
+      "rho_g_cc": 0.964,
+      "E_mt_mpa": 3696.1122550388145,
+      "E_hs_lo_mpa": 3696.1122550388145,
+      "E_hs_hi_mpa": 3766.322691098364,
+      "rel_diff_fe_vs_mt": 0.026671917133407493,
+      "inside_hs_bounds": false
+    }
+  ],
+  "summary": {
+    "vf_realised_mean": 0.3000000000000001,
+    "E_fe_mean_mpa": 3801.38206886258,
+    "E_fe_sd_mpa": 6.805137539284779,
+    "E_fe_min_mpa": 3794.6946548209817,
+    "E_fe_max_mpa": 3809.090653259322,
+    "E_fe_spread_pct": 0.3787043285193362,
+    "E_mt_mpa": 3696.1122550388145,
+    "E_hs_lo_mpa": 3696.1122550388145,
+    "E_hs_hi_mpa": 3766.322691098364,
+    "rel_diff_mean_fe_vs_mt": 0.02848122745196767,
+    "all_cases_inside_hs": false,
+    "mean_inside_hs": false,
+    "hs_hi_exceedance_pct": 0.9308649481118111,
+    "hs_band_width_pct": 1.899575316302512,
+    "E_fe_by_resolution": {
+      "16": 3807.050625078457,
+      "24": 3795.713512646703
+    },
+    "rho_g_cc": 0.964
+  },
+  "failed_checks": [
+    "at least one FE case falls outside the HS bounds (mean exceeds E_hi by 0.93%)",
+    "mean FE modulus falls outside the HS bounds (by 0.93% of E_hi)"
+  ]
+}

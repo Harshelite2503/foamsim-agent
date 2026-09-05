@@ -1,0 +1,191 @@
+{
+  "task": "W3 FE RVE homogenization vs analytical estimate, epoxy / K46",
+  "units": {
+    "modulus": "MPa",
+    "density": "g/cm^3",
+    "length": "micrometre",
+    "volume_fraction": "dimensionless (particles incl. hollow cores)"
+  },
+  "constituents": {
+    "matrix": {
+      "name": "epoxy",
+      "E_mpa": 3000.0,
+      "nu": 0.35,
+      "rho_g_cc": 1.18
+    },
+    "shell": {
+      "name": "glass",
+      "E_mpa": 60000.0,
+      "nu": 0.21,
+      "rho_g_cc": 2.54
+    },
+    "particle": {
+      "grade": "K46",
+      "eta": 0.935570543253382,
+      "true_density_g_cc": 0.45999999999999974,
+      "diameter_um": 40.0
+    },
+    "equivalent_particle": {
+      "E_mpa": 5969.8475802159655,
+      "nu": 0.2045790643094575,
+      "K_mpa": 3367.989456728654,
+      "G_mpa": 2477.980797233209
+    }
+  },
+  "rve": {
+    "target_vf": 0.3,
+    "realised_vf": 0.3000000000000001,
+    "n_spheres": 16,
+    "resolutions": [
+      16,
+      24
+    ],
+    "seeds": [
+      0,
+      1
+    ],
+    "bc": "KUBC",
+    "fe_mode": "equivalent",
+    "packing": "periodic RSA (foamsim.rve)"
+  },
+  "self_check_homogeneous_box": {
+    "n": 4,
+    "E_fe_mpa": 2999.9999999999986,
+    "E_matrix_mpa": 3000.0,
+    "nu_fe": 0.35000000000000003,
+    "nu_matrix": 0.35,
+    "rel_diff_E": 4.547473508864641e-16,
+    "rel_diff_nu": 1.5860328923216522e-16,
+    "passed": true
+  },
+  "fe_runs": [
+    {
+      "resolution_n": 16,
+      "seed": 0,
+      "realised_vf": 0.3000000000000001,
+      "voxelised_vf": 0.298828125,
+      "model": "FE-KUBC-equivalent-n16",
+      "E_mpa": 3809.090653259322,
+      "K_mpa": 3343.6530027494455,
+      "G_mpa": 1453.7034984806262,
+      "nu": 0.3101332758848305,
+      "rho_g_cc": 0.964,
+      "E_mt_mpa": 3696.1122550388145,
+      "rel_diff_vs_mt": 0.030566820059776893,
+      "inside_hs": false,
+      "hs_hi_at_voxelised_vf_mpa": 3763.15084199053,
+      "inside_hs_at_voxelised_vf": false,
+      "overshoot_above_hs_hi_pct": 1.2207804894818475
+    },
+    {
+      "resolution_n": 24,
+      "seed": 0,
+      "realised_vf": 0.3000000000000001,
+      "voxelised_vf": 0.29955150462962965,
+      "model": "FE-KUBC-equivalent-n24",
+      "E_mpa": 3796.732370472424,
+      "K_mpa": 3343.6752754222507,
+      "G_mpa": 1448.3047095229456,
+      "nu": 0.3107505435520619,
+      "rho_g_cc": 0.964,
+      "E_mt_mpa": 3696.1122550388145,
+      "rel_diff_vs_mt": 0.027223230381175974,
+      "inside_hs": false,
+      "hs_hi_at_voxelised_vf_mpa": 3765.1085982579757,
+      "inside_hs_at_voxelised_vf": false,
+      "overshoot_above_hs_hi_pct": 0.8399166023811334
+    },
+    {
+      "resolution_n": 16,
+      "seed": 1,
+      "realised_vf": 0.3000000000000001,
+      "voxelised_vf": 0.29833984375,
+      "model": "FE-KUBC-equivalent-n16",
+      "E_mpa": 3805.0105968975918,
+      "K_mpa": 3343.6356284702842,
+      "G_mpa": 1451.922092465702,
+      "nu": 0.3103356635464499,
+      "rho_g_cc": 0.964,
+      "E_mt_mpa": 3696.1122550388145,
+      "rel_diff_vs_mt": 0.029462942233510078,
+      "inside_hs": false,
+      "hs_hi_at_voxelised_vf_mpa": 3761.8296760425665,
+      "inside_hs_at_voxelised_vf": false,
+      "overshoot_above_hs_hi_pct": 1.1478701741874584
+    },
+    {
+      "resolution_n": 24,
+      "seed": 1,
+      "realised_vf": 0.3000000000000001,
+      "voxelised_vf": 0.29955150462962965,
+      "model": "FE-KUBC-equivalent-n24",
+      "E_mpa": 3794.6946548209817,
+      "K_mpa": 3343.674953030179,
+      "G_mpa": 1447.4152600811685,
+      "nu": 0.3108520959659436,
+      "rho_g_cc": 0.964,
+      "E_mt_mpa": 3696.1122550388145,
+      "rel_diff_vs_mt": 0.026671917133407493,
+      "inside_hs": false,
+      "hs_hi_at_voxelised_vf_mpa": 3765.1085982579757,
+      "inside_hs_at_voxelised_vf": false,
+      "overshoot_above_hs_hi_pct": 0.785795569792986
+    }
+  ],
+  "fe_summary": {
+    "n_runs": 4,
+    "E_mean_mpa": 3801.38206886258,
+    "E_std_mpa": 5.893421985267742,
+    "E_min_mpa": 3794.6946548209817,
+    "E_max_mpa": 3809.090653259322,
+    "E_spread_pct_of_mean": 0.3787043285193362,
+    "rho_g_cc": 0.964
+  },
+  "analytical": {
+    "mori_tanaka": {
+      "model": "HP-MT",
+      "E_mpa": 3696.1122550388145,
+      "K_mpa": 3343.6780488424474,
+      "G_mpa": 1404.5475632067444,
+      "nu": 0.3157661413046641,
+      "rho_g_cc": 0.964
+    },
+    "differential": {
+      "model": "HP-DS",
+      "E_mpa": 3706.409571482168,
+      "nu": 0.31525297585092066
+    },
+    "hashin_shtrikman": {
+      "K_lo": 3343.6780488424474,
+      "K_hi": 3343.6923084125333,
+      "G_lo": 1404.5475632067444,
+      "G_hi": 1435.0440438448045,
+      "E_lo": 3696.1122550388145,
+      "E_hi": 3766.322691098364
+    }
+  },
+  "comparison": {
+    "rel_diff_mean_fe_vs_mt": 0.02848122745196767,
+    "rel_diff_mean_fe_vs_mt_pct": 2.848122745196767,
+    "fe_inside_hs_bounds_all_runs": false,
+    "fe_mean_inside_hs_bounds": false,
+    "mt_tolerance": 0.25,
+    "hs_band_width_pct_of_lower": 1.899575316302512,
+    "max_overshoot_above_hs_upper_pct": 1.2207804894818475,
+    "E_mean_by_resolution_mpa": {
+      "16": 3807.050625078457,
+      "24": 3795.713512646703
+    },
+    "mesh_trend_pct_coarse_to_fine": -0.2977925314959657
+  },
+  "checks_passed": {
+    "homogeneous_box": true,
+    "fe_inside_hs_bounds": false,
+    "fe_vs_mt_within_25pct": true,
+    "all": false
+  },
+  "environment": {
+    "python": "3.13.0",
+    "numpy": "2.5.2"
+  }
+}

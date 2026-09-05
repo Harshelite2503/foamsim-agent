@@ -1,0 +1,5 @@
+{
+  "iterations": 2,
+  "notes": "FE (KUBC, equivalent-particle mode) at n=16,24 x seeds 0,1 vs hollow-particle Mori-Tanaka and HS bounds for epoxy/K46 at vf=0.30; homogeneous-box limit recovered exactly (1e-16). Second run only rewrote the HS-bounds statement: FE mean 3801 MPa sits ~0.9% ABOVE the HS upper bound, reported as a KUBC/voxel-resolution bias (E falls with n) rather than claimed as agreement.",
+  "pushback": false
+}

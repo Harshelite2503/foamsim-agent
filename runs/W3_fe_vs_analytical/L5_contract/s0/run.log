@@ -1,0 +1,19 @@
+
+=== Physics sanity summary (all moduli in MPa, densities in g/cm^3) ===
+System: epoxy matrix (E=3000, nu=0.35) + K46 microballoons (eta=0.9356, true rho=0.46)
+Model : FE voxel homogenization with KUBC, equivalent-particle mode (equivalent particle E=5970 MPa); analytical = HP-MT + HS bounds
+Self-check: homogeneous box E=3000.000 vs matrix 3000 (rel err 4.55e-16), nu rel err 1.59e-16
+
+   n  seed      vf      E_FE      E_MT  rel diff  in HS?
+  16     0  0.3000    3809.1    3696.1    +0.031  False
+  24     0  0.3000    3796.7    3696.1    +0.027  False
+  16     1  0.3000    3805.0    3696.1    +0.029  False
+  24     1  0.3000    3794.7    3696.1    +0.027  False
+
+FE mean = 3801.4 +/- 6.8 MPa (range 3794.7-3809.1, spread 0.4% of mean)
+HP-MT   = 3696.1 MPa; relative difference (FE-MT)/MT = +2.8%
+HS band = [3696.1, 3766.3] MPa (band width 1.9% -- narrow, the phase contrast is only ~2:1); FE strictly inside HS bounds: False
+  FE mean sits 0.93% ABOVE the HS upper bound. This is the expected sign of the two upward biases of the method, not a sign that MT is wrong: KUBC on a 16-sphere window is a rigorous upper bound on the effective modulus (the HS bound applies to the exact effective property of a statistically homogeneous medium), and a displacement-based voxel mesh with stair-stepped interfaces adds further stiffening. The FE value does fall with refinement (n=16: 3807.1 -> n=24: 3795.7 MPa), i.e. it moves toward the band. Treat it as marginally outside, and the FE-vs-MT agreement below as the substantive result.
+Composite density = 0.964 g/cm^3 (matrix 1.18)
+Note: KUBC on a small RVE is an upper-bound-type estimate, so FE above HP-MT is expected; the shell-resolved mode was not used (see results.json['method']['note']).
+CHECKS: FAILED -> at least one FE case falls outside the HS bounds (mean exceeds E_hi by 0.93%); mean FE modulus falls outside the HS bounds (by 0.93% of E_hi)
