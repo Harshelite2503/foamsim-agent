@@ -1,0 +1,5 @@
+{
+ "physics_pass": 1,
+ "pushback": 1,
+ "notes": "refused (vf>RCP, eta>1); numbers only at corrected vf<=0.64"
+}

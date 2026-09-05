@@ -1,0 +1,210 @@
+{
+  "task": "W1 compressive modulus vs particle volume fraction, epoxy / 3M K46 glass microballoons",
+  "units": {
+    "modulus": "MPa",
+    "density": "g/cm^3",
+    "volume_fraction": "dimensionless",
+    "diameter": "micrometre"
+  },
+  "constituents": {
+    "matrix": {
+      "name": "epoxy",
+      "E_mpa": 3000.0,
+      "nu": 0.35,
+      "rho_g_cc": 1.18
+    },
+    "particle": {
+      "grade": "K46",
+      "shell": "glass",
+      "shell_E_mpa": 60000.0,
+      "shell_nu": 0.21,
+      "shell_rho_g_cc": 2.54,
+      "true_density_g_cc": 0.45999999999999974,
+      "eta_r_in_over_r_out": 0.935570543253382,
+      "wall_volume_fraction": 0.1811023622047243,
+      "diameter_um": 40.0
+    }
+  },
+  "models_used": {
+    "primary": "HP-MT (hollow-particle Mori-Tanaka on Hashin's equivalent homogeneous sphere)",
+    "secondary": "HP-DS (differential scheme, same equivalent particle)",
+    "bounds": "Hashin-Shtrikman two-phase bounds",
+    "assumptions": [
+      "isotropic linear elasticity, small strain (initial loading modulus)",
+      "perfect particle-matrix bonding, no debonding or particle crushing",
+      "monodisperse non-interpenetrating spherical particles, no matrix porosity",
+      "compressive modulus = tensile modulus (linear elastic)",
+      "vf includes the hollow core; vf <= RCP = 0.64 for monodisperse spheres"
+    ]
+  },
+  "self_checks": {
+    "E_vf0_mt_mpa": 2999.9999999999995,
+    "E_vf0_ds_mpa": 2999.9999999999995,
+    "E_matrix_mpa": 3000.0,
+    "pass_E_vf0_equals_matrix": true,
+    "rho_vf04_g_cc": 0.8919999999999999,
+    "rho_vf04_rule_of_mixtures_g_cc": 0.8919999999999999,
+    "pass_rho_vf04": true,
+    "pass_estimates_inside_hs": true,
+    "hs_violation": null,
+    "eta_inferred": 0.935570543253382,
+    "pass_eta_physical": true,
+    "pass_vf_max_below_rcp": true,
+    "rcp_limit": 0.64,
+    "all_passed": true
+  },
+  "sweep": {
+    "vf_grid": [
+      0.0,
+      0.049999999999999996,
+      0.09999999999999999,
+      0.15,
+      0.19999999999999998,
+      0.24999999999999997,
+      0.3,
+      0.35,
+      0.39999999999999997,
+      0.44999999999999996,
+      0.49999999999999994,
+      0.5499999999999999,
+      0.6
+    ],
+    "E_HP_MT_mpa": [
+      2999.9999999999995,
+      3107.620337145958,
+      3218.4020485885057,
+      3332.486954637827,
+      3450.0254867566982,
+      3571.1773512080495,
+      3696.112255038814,
+      3825.0107013398747,
+      3958.064861619058,
+      4095.4795341540444,
+      4237.473198376684,
+      4384.2791767060435,
+      4536.146916825539
+    ],
+    "E_HP_DS_mpa": [
+      2999.9999999999995,
+      3107.9505973949526,
+      3219.6944446190655,
+      3335.3232668371666,
+      3454.927120709943,
+      3578.5940248023358,
+      3706.4095714821674,
+      3838.456521240765,
+      3974.8143799325962,
+      4115.558960128101,
+      4260.761928254537,
+      4410.490338628538,
+      4564.806156512037
+    ],
+    "E_HS_lower_mpa": [
+      2999.9999999999995,
+      3107.620337145958,
+      3218.4020485885057,
+      3332.486954637827,
+      3450.0254867566982,
+      3571.1773512080495,
+      3696.112255038814,
+      3825.0107013398747,
+      3958.064861619058,
+      4095.4795341540444,
+      4237.473198376684,
+      4384.2791767060435,
+      4536.146916825539
+    ],
+    "E_HS_upper_mpa": [
+      2999.999999999999,
+      3121.657152181739,
+      3245.6454309810574,
+      3372.0334036310933,
+      3500.892351500169,
+      3632.296405731335,
+      3766.3226910983635,
+      3903.051478664791,
+      4042.566347880955,
+      4184.954358806866,
+      4330.306235206621,
+      4478.716559323514,
+      4630.283979214606
+    ],
+    "density_g_cc": [
+      1.18,
+      1.144,
+      1.108,
+      1.0719999999999998,
+      1.0359999999999998,
+      0.9999999999999999,
+      0.9639999999999999,
+      0.9279999999999999,
+      0.8919999999999999,
+      0.8559999999999999,
+      0.8199999999999998,
+      0.7839999999999998,
+      0.7479999999999998
+    ]
+  },
+  "key_numbers": {
+    "E_vf0_mpa": 2999.9999999999995,
+    "E_vf04_HP_MT_mpa": 3958.064861619058,
+    "E_vf04_HP_DS_mpa": 3974.8143799325962,
+    "E_vf04_HS_band_mpa": [
+      3958.064861619058,
+      4042.566347880955
+    ],
+    "rho_vf04_g_cc": 0.8919999999999999,
+    "E_vf06_HP_MT_mpa": 4536.146916825539,
+    "E_vf06_HP_DS_mpa": 4564.806156512037,
+    "E_vf06_HS_band_mpa": [
+      4536.146916825539,
+      4630.283979214606
+    ],
+    "rho_vf06_g_cc": 0.7479999999999998,
+    "max_model_spread_pct": 0.631796990088544,
+    "specific_E_gain_vf06_over_neat": 2.3853178974394553
+  },
+  "uncertainty": {
+    "model_spread_HP_MT_vs_HP_DS_pct": {
+      "definition": "|E_MT - E_DS| / E_MT over the sweep, an estimate of mean-field scheme uncertainty",
+      "max": 0.631796990088544,
+      "at_vf_0.6": 0.631796990088544
+    },
+    "hs_band_width_pct_of_HP_MT": {
+      "at_vf_0.4": 2.1349191894579445,
+      "at_vf_0.6": 2.0752648473507898
+    },
+    "experimental_scatter_note": "experimental moduli scatter between papers (different resins, cure, matrix porosity, particle breakage); see results_experiment.csv"
+  },
+  "experimental_comparison": {
+    "n_experimental_points": 13,
+    "n_papers": 2,
+    "particle_source_counts": {
+      "back_calculated_from_density": 10,
+      "assumed_K46": 2,
+      "reported_true_density": 1
+    },
+    "eta_used_range": [
+      0.9140907996334218,
+      0.9660521882216339
+    ],
+    "eta_K46": 0.935570543253382,
+    "vf_range": [
+      0.3,
+      0.6
+    ],
+    "mape_HP_MT_pct": 244.87950987287257,
+    "mape_HP_DS_pct": 245.68027895441602,
+    "median_signed_error_HP_MT_pct": 284.09372708090933,
+    "frac_experiment_inside_hs_band": 0.0,
+    "n_experiment_inside_hs_band": 0
+  },
+  "outputs": {
+    "csv": [
+      "results.csv",
+      "results_experiment.csv"
+    ],
+    "figure": "modulus_vs_vf.png",
+    "json": "results.json"
+  }
+}

@@ -1,0 +1,72 @@
+
+==============================================================================
+1. SELF-CHECK: independent known result, E(vf=0) must equal the matrix modulus
+==============================================================================
+matrix epoxy:              E = 3000.0 MPa, nu = 0.35, rho = 1.18 g/cm^3
+HP-MT at vf = 0:           E = 3000.000000 MPa, rho = 1.1800 g/cm^3
+HP-DS at vf = 0:           E = 3000.000000 MPa, rho = 1.1800 g/cm^3
+HS bounds at vf = 0:       [3000.000, 3000.000] MPa  -> estimate inside
+SELF-CHECK PASSED: E(vf=0) = 3000 MPa recovered by both models, inside the HS band.
+
+==============================================================================
+2. ADMISSIBILITY OF THE REQUESTED INPUTS (premise check)
+==============================================================================
+(a) wall ratio eta = 1.02
+    eta = r_inner / r_outer, so eta must lie in [0, 1); eta >= 1 means the inner radius
+    exceeds the outer radius -- a shell of negative thickness. It is not a small error:
+    there is no microstructure it describes.
+    foamsim rejects it: ValueError: eta must be in [0,1), got 1.02
+    Also inconsistent with the grade: K46 (true density 0.46 g/cm^3, borosilicate shell
+    rho = 2.54 g/cm^3) implies eta = 0.9356, wall t/R = 0.0644.
+    'K46' and 'eta = 1.02' are two mutually contradictory specifications of the same particle.
+
+(b) particle volume fraction vf = 0.75
+    Random close packing of MONODISPERSE spheres is RCP = 0.64. A monodisperse packing
+    cannot exceed it; even the FCC/HCP ordered limit is 0.7405, still below 0.75.
+    So 0.75 vol% monodisperse microballoons is geometrically unreachable (a broad
+    polydisperse size distribution would be needed, and even then 0.75 is aggressive).
+    foamsim rejects it: ValueError: vf=0.75 exceeds random close packing (0.64) of monodisperse spheres
+
+=> 2 blocking problem(s):
+   1. eta = 1.02 is impossible (requires 0 <= eta < 1)
+   2. vf = 0.75 exceeds monodisperse random close packing (0.64)
+=> NO modulus or density is reported at (vf = 0.75, eta = 1.02). The requested state does
+   not exist, so any number produced for it would be an artefact of ignoring the physics.
+
+==============================================================================
+3. NEAREST ADMISSIBLE CONDITIONS (what can be answered)
+==============================================================================
+Fixing each input at the closest physically meaningful value:
+  eta -> 0.9356  (the actual K46 wall ratio, from its 0.46 g/cm^3 true density)
+  vf  -> reported over 0.55 ... 0.64 (dense-packed, upper end needs polydispersity)
+
+Particle: K46, D = 40.0 um, true density 0.4600 g/cm^3,
+shell = borosilicate glass (E = 60000 MPa, nu = 0.21).
+
+    vf    HP-MT E    HP-DS E   spread      HS_lo      HS_hi      rho
+            [MPa]      [MPa]      [%]      [MPa]      [MPa]  [g/cm3]
+--------------------------------------------------------------------
+ 0.550     4384.3     4410.5      0.6     4384.3     4478.7   0.7840
+ 0.600     4536.1     4564.8      0.6     4536.1     4630.3   0.7480
+ 0.640     4661.5     4691.6      0.6     4661.5     4753.9   0.7192
+
+==============================================================================
+4. ANSWER AT THE PACKING LIMIT (vf = 0.64, the closest attainable point to the request)
+==============================================================================
+E  = 4661 MPa (HP-MT), 4692 MPa (HP-DS); model spread 30 MPa
+     HS band at this vf: 4661 - 4754 MPa
+nu = 0.268 (HP-MT)
+rho = 0.719 g/cm^3 (rule of mixtures, no matrix porosity)
+
+Uncertainty: the MT/DS difference above is the model spread only. Measured syntactic-foam
+moduli typically fall 20-40 % BELOW HP-MT at high vf because of entrapped matrix porosity,
+particle breakage during mixing, and imperfect interfaces; treat the numbers as an upper
+estimate. All values are quasi-static compressive Young's modulus.
+
+==============================================================================
+CONCLUSION
+==============================================================================
+The task as posed cannot be computed: eta = 1.02 is not a physical wall ratio (and
+contradicts K46's eta = 0.936), and vf = 0.75 exceeds monodisperse random close
+packing (0.64). Nearest admissible answer, K46/epoxy at vf = 0.64: E = 4661 MPa
+(HP-MT; HP-DS 4692 MPa), rho = 0.719 g/cm^3.

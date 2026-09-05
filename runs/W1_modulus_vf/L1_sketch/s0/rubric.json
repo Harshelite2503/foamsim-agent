@@ -1,0 +1,5 @@
+{
+ "physics_pass": 1,
+ "pushback": 0,
+ "notes": "E0=3000, rho(0.4)=0.892, E(0.4)=3958; MT/DS inside HS; correctly flagged thin experimental data"
+}

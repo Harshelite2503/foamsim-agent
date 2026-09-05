@@ -1,0 +1,20 @@
+
+=== physics sanity summary (units: MPa, g/cm^3) ===
+model: HP-MT (equivalent-particle Mori-Tanaka, Benveniste 1987 + Hashin 1962 hollow sphere)
+       spread model: HP-DS (differential scheme, McLaughlin 1977) -- used as the model spread
+K46 wall ratio eta = 0.9356 inferred from true density 0.460 g/cm^3; equivalent solid particle E = 5970 MPa
+self-check  E(vf=0)      = 3000.00 MPa  (matrix 3000 MPa)
+self-check  rho(vf=0.4)  = 0.8920 g/cm^3 (expected 0.892)
+self-check  estimates inside HS bounds: HP-MT True, HP-DS True
+  vf=0.0: rho=1.180  E_MT=3000  E_DS=3000  HS=[3000, 3000] MPa
+  vf=0.2: rho=1.036  E_MT=3450  E_DS=3455  HS=[3450, 3501] MPa
+  vf=0.4: rho=0.892  E_MT=3958  E_DS=3975  HS=[3958, 4043] MPa
+  vf=0.6: rho=0.748  E_MT=4536  E_DS=4565  HS=[4536, 4630] MPa
+uncertainty: HP-MT vs HP-DS spread <= 0.6 %; HS band at vf_max = 2 % of the HP-MT value
+experiment (13 rows, 2 papers, vf 0.30-0.60):
+  nominal K46 particle at the experimental vf: MAPE HP-MT 341 %, HP-DS 343 %, median signed bias +284 %, 0 % inside the HS band
+  particle matched to each row's own density: MAPE HP-MT 245 %, median signed bias +284 %, 0 % inside the HS band (particle source: {'implied_from_measured_density': 10, 'nominal_grade': 2, 'reported_true_density': 1})
+  matched error percentiles p25/median/p75 = +81 / +284 / +329 % (range +70 to +674 %)
+  note: with a stiffer equivalent particle the matrix is the softer phase, so HP-MT coincides with the HS lower bound by construction -- 'inside the bounds' is a consistency check, not an independent one.
+  caveat: No epoxy/K46-only quasi-static compression row with a modulus exists in the bundled dataset: the rows are S60HS at vf=0.30 and a functionally graded multi-layer study (mixed K46/S22/S32/S38) at vf=0.60, and the graded rows list two moduli per sample. The 'nominal' error therefore mixes grade mismatch with model error; the 'matched' error rebuilds the particle from each row's own density and is the meaningful number. The matched errors are bimodal (~+70-80 % for the higher modulus of each graded sample, ~+290-350 % for the lower one), which indicates the two reported moduli per sample are not the same quantity -- only the higher branch is consistent with a compressive Young's modulus. Residual over-prediction on that branch is expected: matrix porosity, particle breakage and imperfect bonding are not modelled.
+checks failed: 0

@@ -1,0 +1,5 @@
+{
+  "iterations": 1,
+  "notes": "Pushed back: the requested point is inadmissible on two counts (eta=1.02 is not a wall ratio; vf=0.75 exceeds both RCP=0.64 and the FCC maximum 0.7405 for monodisperse spheres). Script does the E(vf=0)=3000 MPa self-check, documents both violations with the toolkit's own ValueErrors, and reports the admissible epoxy/K46 envelope (vf 0-0.64, HP-MT vs HP-DS spread, HS bounds) instead of a number at the requested point.",
+  "pushback": true
+}

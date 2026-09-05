@@ -1,0 +1,87 @@
+
+==============================================================================
+0. Reference limits (self-checks)
+==============================================================================
+vf=0 -> E =   3000.00 MPa (matrix E = 3000.00)   rho = 1.1800 (matrix rho = 1.1800)
+vf cap: task asks vf <= 0.6; toolkit packing limit RCP = 0.64 -> OK, inside packing limit
+note: vf > ~0.55 in practice requires polydisperse packing.
+eta window [0.8, 0.97] is inside the physical range [0, 1).
+
+==============================================================================
+1. Feasibility: is E >= 3500 MPa reachable inside the design space?
+==============================================================================
+stiffest corner: eta = 0.8, vf = 0.6
+  equivalent particle: eq(glass,eta=0.800), E_p = 19354.9 MPa, rho_p = 1.2395 g/cm^3
+  HS bounds  E_lo =   7831.1 MPa   E_hi =  10729.5 MPa
+  HP-MT      E    =   7831.1 MPa   rho = 1.2157 g/cm^3
+  target 3500 MPa vs HS upper bound 10729.5 MPa -> ATTAINABLE in principle
+
+==============================================================================
+2. Design-space sweep (HP-MT, with HP-DS and HS bounds)
+==============================================================================
+grid: 171 eta values x 61 vf values = 10431 points
+all HP-MT estimates inside HS bounds: True
+all HP-DS estimates inside HS bounds: True
+points meeting E >= 3500 MPa (HP-MT): 7075 / 10431
+
+==============================================================================
+3. Optimum: lightest feasible design (continuous eta)
+==============================================================================
+  eta*                 = 0.958  (wall t/R = 0.042, particle true density 0.3068 g/cm^3)
+  vf*                  = 0.600
+  density              = 0.6561 g/cm^3   (44.4 % lighter than neat epoxy)
+  E (HP-MT)            = 3514.9 MPa   (target 3500)
+  E (HP-DS cross-check)= 3517.1 MPa (meets target)
+  HS band at this point: [3514.9, 3522.0] MPa -> estimate inside bounds: True
+  nu                   = 0.2714
+  specific modulus     = 5357.5 MPa/(g/cm^3)
+
+  (the optimum sits at vf = 0.60; the vf ceiling in the task is 0.6 and lighter, thinner-walled particles trade modulus for density)
+  lightest design at vf = 0.6 that still meets target: 0.6561 g/cm^3
+
+==============================================================================
+4. Same search restricted to 3M glass-bubble grades
+==============================================================================
+ grade     eta  in [0.80,0.97]   rho_p  min vf meeting target  rho at that vf
+    K1  0.9833           False   0.125           none <= 0.60               -
+   K15  0.9799           False   0.150           none <= 0.60               -
+   K20  0.9730           False   0.200           none <= 0.60               -
+   S22  0.9703           False   0.220           none <= 0.60               -
+   K25  0.9661            True   0.250           none <= 0.60               -
+   S32  0.9561            True   0.320                   0.50          0.7500
+   S38  0.9474            True   0.380                   0.31          0.9320
+   K46  0.9356            True   0.460                   0.23          1.0144
+   S60  0.9141            True   0.600                   0.17          1.0814
+
+best grade design: S32 (eta = 0.9561) at vf = 0.60
+  density = 0.6640 g/cm^3, E = 3610.6 MPa, HS band [3610.6, 3620.3] MPa
+
+==============================================================================
+5. Trade-off curve: minimum achievable density vs required modulus
+==============================================================================
+ E_req (MPa)   min rho (g/cm^3)     eta     vf
+        3000             0.6180   0.967   0.60
+        3100             0.6265   0.965   0.60
+        3200             0.6350   0.963   0.60
+        3300             0.6392   0.962   0.60
+        3400             0.6477   0.960   0.60
+        3500             0.6561   0.958   0.60
+        3600             0.6644   0.956   0.60
+        3700             0.6728   0.954   0.60
+        3800             0.6811   0.952   0.60
+        3900             0.6894   0.950   0.60
+        4000             0.7017   0.947   0.60
+        4100             0.7099   0.945   0.60
+        4200             0.7180   0.943   0.60
+highest modulus reachable in the box (HP-MT): 7831.1 MPa at eta = 0.800, vf = 0.60
+wrote results.csv, grades.csv, tradeoff.csv, tradeoff.png
+
+==============================================================================
+6. Answer
+==============================================================================
+optimum (continuous eta): eta = 0.958, vf = 0.60
+  density 0.6561 g/cm^3, E(HP-MT) 3514.9 MPa, E(HP-DS) 3517.1 MPa
+  HS feasibility: target is below the HS upper bound (10729.5 MPa at the stiffest corner) -> not bound-violating; the HP-MT estimate lies inside its own HS band.
+nearest catalogue grade: S32 at vf = 0.60 -> rho 0.6640 g/cm^3, E 3610.6 MPa
+
+Caveat: HP-MT/HP-DS are idealised estimates (perfect bonding, no matrix porosity, no particle breakage); experimental syntactic-foam moduli typically fall 20-40 % below HP-MT, so the design should carry margin above the 3500 MPa target.

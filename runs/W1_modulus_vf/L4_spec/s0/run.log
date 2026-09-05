@@ -1,0 +1,34 @@
+
+=== Epoxy / 3M K46 syntactic foam: compressive modulus vs volume fraction ===
+Constituents: epoxy E=3000 MPa, nu=0.35, rho=1.18 g/cm3; K46 shell E=60 GPa, nu=0.21, true density 0.46 g/cm3 -> eta=0.9356 (wall volume fraction 0.181).
+Model: HP Mori-Tanaka (primary) on Hashin's equivalent hollow-sphere particle; HP differential scheme as the second estimate; HS bounds as the rigorous envelope. Units MPa, g/cm3.
+
+Self-checks:
+  E(vf=0) = 3000.0000 MPa (matrix 3000 MPa) -> PASS
+  rho(vf=0.4) = 0.8920 g/cm3 (rule of mixtures 0.8920, expected 0.892) -> PASS
+  all HP-MT and HP-DS estimates inside HS bounds on vf in [0,0.6] -> PASS
+  eta = 0.9356 in [0,1) and vf_max = 0.60 < RCP = 0.64 -> PASS
+
+Trend (MPa unless noted):
+  vf=0.00  rho=1.180 g/cm3  E_MT=  3000.0  E_DS=  3000.0  HS=[  3000.0,   3000.0]
+  vf=0.05  rho=1.144 g/cm3  E_MT=  3107.6  E_DS=  3108.0  HS=[  3107.6,   3121.7]
+  vf=0.10  rho=1.108 g/cm3  E_MT=  3218.4  E_DS=  3219.7  HS=[  3218.4,   3245.6]
+  vf=0.15  rho=1.072 g/cm3  E_MT=  3332.5  E_DS=  3335.3  HS=[  3332.5,   3372.0]
+  vf=0.20  rho=1.036 g/cm3  E_MT=  3450.0  E_DS=  3454.9  HS=[  3450.0,   3500.9]
+  vf=0.25  rho=1.000 g/cm3  E_MT=  3571.2  E_DS=  3578.6  HS=[  3571.2,   3632.3]
+  vf=0.30  rho=0.964 g/cm3  E_MT=  3696.1  E_DS=  3706.4  HS=[  3696.1,   3766.3]
+  vf=0.35  rho=0.928 g/cm3  E_MT=  3825.0  E_DS=  3838.5  HS=[  3825.0,   3903.1]
+  vf=0.40  rho=0.892 g/cm3  E_MT=  3958.1  E_DS=  3974.8  HS=[  3958.1,   4042.6]
+  vf=0.45  rho=0.856 g/cm3  E_MT=  4095.5  E_DS=  4115.6  HS=[  4095.5,   4185.0]
+  vf=0.50  rho=0.820 g/cm3  E_MT=  4237.5  E_DS=  4260.8  HS=[  4237.5,   4330.3]
+  vf=0.55  rho=0.784 g/cm3  E_MT=  4384.3  E_DS=  4410.5  HS=[  4384.3,   4478.7]
+  vf=0.60  rho=0.748 g/cm3  E_MT=  4536.1  E_DS=  4564.8  HS=[  4536.1,   4630.3]
+
+Physics: K46 is a stiff borosilicate microballoon (equivalent-particle modulus above the epoxy), so E increases with vf while density falls from 1.180 to 0.748 g/cm3 -- specific modulus rises 2.39x at vf=0.6.
+Uncertainty: HP-MT vs HP-DS spread <= 0.6 % over the sweep; HS band at vf=0.6 spans 4536-4630 MPa (2 % of the HP-MT estimate).
+Experiment (FoamGPT, 13 quasi-static epoxy/glass-microballoon compression points from 2 papers, vf 0.30-0.60, eta implied by each row 0.914-0.966 vs eta_K46=0.936): HP-MT MAPE 244.9 %, HP-DS MAPE 245.7 %, median signed error +284.1 %; 0/13 measurements lie inside the HS band.
+  Particle per row identified as {'back_calculated_from_density': 10, 'assumed_K46': 2, 'reported_true_density': 1}. The reference rows are not K46 foams: most are thin-walled S22/S32/S38 layered (functionally graded) foams, so they are a sanity check on the model class, not a like-for-like K46 validation.
+  All measurements fall BELOW the HS lower bound for a perfect two-phase epoxy+microballoon composite. That is not a numerical error: it means these foams are not two-phase - entrapped matrix porosity, weak/debonded interfaces and (in the graded foams) layer interfaces act as a third, compliant phase, and some reported moduli may be machine-compliance-affected secant values. The mean-field estimates should therefore be read as an upper envelope for E.
+  Measured moduli sit below the HP-MT estimate (positive signed error) because of matrix porosity, imperfect bonding, particle breakage and, in the graded foams, interfaces between layers. No constant was tuned and no experimental value is hard-coded.
+
+Wrote results.json, results.csv, results_experiment.csv, modulus_vs_vf.png

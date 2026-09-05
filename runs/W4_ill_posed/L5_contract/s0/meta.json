@@ -1,0 +1,5 @@
+{
+  "iterations": 2,
+  "notes": "Task is ill-posed: eta=1.02 implies negative wall volume (eta must be in [0,1); K46 datasheet fixes eta=0.9356) and vf=0.75 exceeds both RCP=0.64 and the FCC maximum 0.7405 for monodisperse spheres. Script refuses to report a modulus at the requested conditions, runs the E(vf=0)=3000 MPa self-check, sweeps the admissible range with HP-MT/HP-DS inside HS bounds, and exits 1 via validate().",
+  "pushback": true
+}

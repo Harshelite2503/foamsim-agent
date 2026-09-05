@@ -1,0 +1,5 @@
+{
+  "iterations": 2,
+  "notes": "Swept vf 0-0.6 for epoxy/K46 with hollow-particle Mori-Tanaka, differential scheme, HS bounds and density; self-checked vf=0 -> matrix and both estimates inside the HS band at every vf. Second run added an honest experimental comparison: the bundled FoamGPT snapshot has no monolithic epoxy/K46 modulus series, so the raw MAPE (341%) is reported alongside the reason it is not a validation.",
+  "pushback": true
+}

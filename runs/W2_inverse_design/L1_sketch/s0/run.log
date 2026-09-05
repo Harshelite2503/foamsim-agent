@@ -1,0 +1,40 @@
+==========================================================================
+W2 inverse design: lightest epoxy / glass-microballoon foam, E >= 3500 MPa
+==========================================================================
+[check] vf=0 -> E = 3000.0 MPa (matrix E = 3000.0 MPa)  OK
+[check] K46 vf=0.40: E = 3958.1 MPa inside HS band [3958.1, 4042.6] MPa  OK
+[check] HS upper bound, solid glass at vf=RCP=0.64: E_hi = 30703.6 MPa -> target 3500 MPa is FEASIBLE
+
+[sweep] 20954 feasible (eta, vf) grid points out of 25413 evaluated
+[sweep] grid optimum: eta = 0.9550, vf = 0.6400, rho = 0.6345 g/cm^3
+
+--------------------------------------------------------------------------
+OPTIMUM (HP-MT)
+--------------------------------------------------------------------------
+  eta (r_in/r_out)      : 0.9583   (wall t/R = 0.0417)
+  particle true density : 0.3050 g/cm^3
+  vf (particles)        : 0.5974   (RCP limit 0.64)
+      NOTE: vf > 0.55 is only achievable with a polydisperse size distribution;
+            monodisperse packing tops out at RCP = 0.64.
+  E (HP-MT)             : 3500.0 MPa  (target 3500)
+  E (HP-DS cross-check) : 3502.0 MPa
+  HS band at this point : [3500.0, 3506.8] MPa
+  density               : 0.6573 g/cm^3 (44.3 % lighter than neat epoxy at 1.18 g/cm^3)
+  specific modulus      : 5325.1 MPa/(g/cm^3)
+
+Nearest commercial 3M grades (min vf meeting the target, HP-MT):
+  S60    eta=0.914  vf=0.161  rho=1.0866 g/cm^3  E=3500.0 MPa
+  iM30K  eta=0.914  vf=0.161  rho=1.0866 g/cm^3  E=3500.0 MPa
+  K46    eta=0.936  vf=0.221  rho=1.0210 g/cm^3  E=3500.0 MPa
+  iM16K  eta=0.936  vf=0.221  rho=1.0210 g/cm^3  E=3500.0 MPa
+  H50    eta=0.930  vf=0.197  rho=1.0459 g/cm^3  E=3500.0 MPa
+  S38    eta=0.947  vf=0.309  rho=0.9330 g/cm^3  E=3500.0 MPa
+  K25    eta=0.966  cannot reach 3500 MPa below RCP
+  K15    eta=0.980  cannot reach 3500 MPa below RCP
+
+Caveat: HP-MT is an idealised estimate (perfect bonding, no matrix porosity,
+no particle breakage); measured syntactic-foam moduli typically fall 20-40 %
+below it, so the design above should be treated as an upper-bound-of-optimism
+target and verified experimentally. The optimum eta is also thinner-walled
+than any standard 3M grade, so the practical choice is the best commercial
+grade in the table above.

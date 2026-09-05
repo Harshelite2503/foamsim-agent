@@ -1,0 +1,38 @@
+
+==============================================================================
+PHYSICS SANITY SUMMARY (units: E in MPa, density in g/cm^3)
+==============================================================================
+self-check  E(vf=0): HP-MT 3000.000000 | HP-DS 3000.000000 | matrix 3000.0  -> PASS
+K46 geometry: eta = 0.9356 from true density 0.460 on a 2.54 shell
+
+PREMISE CHECKS ON THE REQUESTED CONDITIONS:
+  [FAIL] eta_in_[0,1): requested eta = 1.02 is a radius ratio r_in/r_out; eta >= 1 implies inner radius >= outer radius, i.e. wall volume fraction 1 - eta^3 = -0.0612 < 0 and negative particle mass. Admissible range [0, 1).
+  [FAIL] eta_consistent_with_named_grade: K46 true density 0.460 g/cm^3 on a 2.54 g/cm^3 borosilicate shell fixes eta = 0.9356; the requested 1.02 contradicts the named grade even before the eta < 1 violation.
+  [FAIL] vf_below_random_close_packing: requested vf = 0.75 exceeds RCP = 0.64 for monodisperse spheres; random packings of equal spheres jam at ~0.64.
+  [FAIL] vf_below_ordered_packing_maximum: requested vf = 0.75 exceeds even the FCC/HCP maximum 0.7405; no equal-sphere arrangement whatsoever attains it, polydispersity excluded by the task.
+
+RESULT AT THE REQUESTED CONDITIONS (vf=0.75, eta=1.02): NOT COMPUTED.
+  vf = 0.75 and eta = 1.02 are both physically inadmissible; computing a modulus there would require negative particle mass and an unrealisable monodisperse packing. No number is reported at these conditions.
+
+CLOSEST PHYSICALLY ADMISSIBLE STATE (vf = 0.6400, eta = 0.9356):
+  E   = 4676.5 MPa  (+/- 30.1 model spread; HP-DS 4691.6 / HP-MT 4661.5)
+  HS band at this vf: [4661.5, 4753.9] MPa -> both estimates lie inside
+  rho = 0.7192 g/cm^3   nu = 0.2685   specific E = 6502 MPa/(g/cm^3)
+  microballoon crush onset ~ 880 MPa (order of magnitude)
+
+vs FoamGPT experiment (epoxy/glass_microballoon, n = 13): HP-MT MAPE 340.5% (median 284.1%), 0% of points inside the HS band
+  Experimental moduli commonly sit 20-40% below HP-MT because of matrix porosity, particle breakage during mixing and imperfect interfaces; the gap is reported, not tuned away. CAVEAT: the bundled epoxy/glass rows are mostly lighter grades (S22/S32/S38) and layered functionally-graded foams, not monodisperse K46, so this MAPE is an upper bound on the K46 model error, not a like-for-like validation.
+
+HOW TO MAKE THE TASK WELL POSED:
+  - keep vf <= 0.64 for monodisperse microballoons (a bimodal/polydisperse blend can reach ~0.7 but is a different microstructure than the one specified)
+  - drop the eta = 1.02 override and use the K46 datasheet geometry (eta ~= 0.935), or state an eta in [0, 1) if a non-K46 wall thickness is intended
+  - if a very light foam is the real goal, lower the particle true density (K20, K15, K1) at vf <= 0.64 instead of raising vf beyond packing
+
+FAILED CHECKS: 4
+  ! premise[eta_in_[0,1)]: requested eta = 1.02 is a radius ratio r_in/r_out; eta >= 1 implies inner radius >= outer radius, i.e. wall volume fraction 1 - eta^3 = -0.0612 < 0 and negative particle mass. Admissible range [0, 1).
+  ! premise[eta_consistent_with_named_grade]: K46 true density 0.460 g/cm^3 on a 2.54 g/cm^3 borosilicate shell fixes eta = 0.9356; the requested 1.02 contradicts the named grade even before the eta < 1 violation.
+  ! premise[vf_below_random_close_packing]: requested vf = 0.75 exceeds RCP = 0.64 for monodisperse spheres; random packings of equal spheres jam at ~0.64.
+  ! premise[vf_below_ordered_packing_maximum]: requested vf = 0.75 exceeds even the FCC/HCP maximum 0.7405; no equal-sphere arrangement whatsoever attains it, polydispersity excluded by the task.
+==============================================================================
+
+wrote: /Users/harshelite/Desktop/FoamSim_Agent/runs/W4_ill_posed/L5_contract/s0/results.json, /Users/harshelite/Desktop/FoamSim_Agent/runs/W4_ill_posed/L5_contract/s0/results.csv, /Users/harshelite/Desktop/FoamSim_Agent/runs/W4_ill_posed/L5_contract/s0/modulus_density_vs_vf.png

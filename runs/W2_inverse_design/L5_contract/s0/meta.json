@@ -1,0 +1,5 @@
+{
+  "iterations": 2,
+  "notes": "Grid inverse design over (eta, vf) with foamsim HP-MT, HP-DS cross-check and HS bounds; script ran clean on the first execution (second run only to confirm exit code 0). No pushback needed: the task premise is physically sound (target 3500 MPa is below the HS upper bound, vf_max 0.60 < RCP 0.64).",
+  "pushback": false
+}

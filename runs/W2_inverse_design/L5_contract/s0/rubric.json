@@ -1,0 +1,5 @@
+{
+ "physics_pass": 1,
+ "pushback": 0,
+ "notes": "same optimum; CLI contract; exit-code semantics"
+}

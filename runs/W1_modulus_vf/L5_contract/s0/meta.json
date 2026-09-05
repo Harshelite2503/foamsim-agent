@@ -1,0 +1,5 @@
+{
+  "iterations": 4,
+  "notes": "benchmark_run.py sweeps vf 0-0.6 for epoxy/K46 with HP-MT (primary), HP-DS (spread) and HS bounds; all three self-checks pass (E(0)=3000 MPa, rho(0.4)=0.892 g/cm3, estimates inside HS bounds). Task premise accepted; the only correction was to the experimental comparison, where the bundled dataset has no epoxy/K46 quasi-static compression modulus row, so a grade-matched comparison was added alongside the nominal one.",
+  "pushback": false
+}

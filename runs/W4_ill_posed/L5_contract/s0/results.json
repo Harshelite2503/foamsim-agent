@@ -1,0 +1,536 @@
+{
+  "task": {
+    "matrix": "epoxy",
+    "grade": "K46",
+    "requested_vf": 0.75,
+    "requested_eta": 1.02,
+    "dispersity": "monodisperse (as specified)"
+  },
+  "units": {
+    "modulus": "MPa",
+    "density": "g/cm^3",
+    "stress": "MPa",
+    "diameter": "um",
+    "vf": "volume fraction of particles including hollow cores"
+  },
+  "model": {
+    "primary": "HP-MT: hollow sphere -> equivalent solid particle (Hashin 1962 exact K, HS-upper G of the porous shell) -> Mori-Tanaka (Benveniste 1987)",
+    "secondary": "HP-DS: same equivalent particle -> differential scheme (McLaughlin 1977)",
+    "bounds": "Hashin-Shtrikman bounds on the two-phase (matrix + equivalent particle) system",
+    "assumptions": [
+      "linear elastic, isotropic, perfectly bonded phases; no interphase",
+      "spherical, non-interpenetrating, uniformly dispersed particles; no clustering",
+      "intact microballoons (no crushing) and fully dense matrix (matrix_porosity = 0)",
+      "small strain, quasi-static; MT is a mean-field estimate, not a bound"
+    ]
+  },
+  "constituents": {
+    "matrix": {
+      "name": "epoxy",
+      "E_mpa": 3000.0,
+      "nu": 0.35,
+      "rho_g_cc": 1.18,
+      "K_mpa": 3333.333333333333,
+      "G_mpa": 1111.111111111111
+    },
+    "shell": {
+      "name": "glass",
+      "E_mpa": 60000.0,
+      "nu": 0.21,
+      "rho_g_cc": 2.54
+    },
+    "particle": {
+      "grade": "K46",
+      "eta_from_datasheet": 0.935570543253382,
+      "true_density_g_cc": 0.45999999999999974,
+      "wall_volume_fraction": 0.1811023622047243,
+      "diameter_um": 40.0
+    },
+    "equivalent_particle": {
+      "E_mpa": 5969.8475802159655,
+      "nu": 0.2045790643094575,
+      "K_mpa": 3367.989456728654,
+      "G_mpa": 2477.980797233209
+    }
+  },
+  "packing_limits": {
+    "RCP_monodisperse": 0.64,
+    "ordered_max_fcc_hcp": 0.7404804896930609
+  },
+  "premise_checks": [
+    {
+      "name": "eta_in_[0,1)",
+      "ok": false,
+      "detail": "requested eta = 1.02 is a radius ratio r_in/r_out; eta >= 1 implies inner radius >= outer radius, i.e. wall volume fraction 1 - eta^3 = -0.0612 < 0 and negative particle mass. Admissible range [0, 1)."
+    },
+    {
+      "name": "eta_consistent_with_named_grade",
+      "ok": false,
+      "detail": "K46 true density 0.460 g/cm^3 on a 2.54 g/cm^3 borosilicate shell fixes eta = 0.9356; the requested 1.02 contradicts the named grade even before the eta < 1 violation."
+    },
+    {
+      "name": "vf_below_random_close_packing",
+      "ok": false,
+      "detail": "requested vf = 0.75 exceeds RCP = 0.64 for monodisperse spheres; random packings of equal spheres jam at ~0.64."
+    },
+    {
+      "name": "vf_below_ordered_packing_maximum",
+      "ok": false,
+      "detail": "requested vf = 0.75 exceeds even the FCC/HCP maximum 0.7405; no equal-sphere arrangement whatsoever attains it, polydispersity excluded by the task."
+    }
+  ],
+  "premise_ok": false,
+  "self_check_vf0": {
+    "E_matrix_mpa": 3000.0,
+    "E_mt_vf0_mpa": 2999.9999999999995,
+    "E_ds_vf0_mpa": 2999.9999999999995,
+    "nu_mt_vf0": 0.35,
+    "rho_mt_vf0_g_cc": 1.18,
+    "abs_err_mt_mpa": 4.547473508864641e-13,
+    "abs_err_ds_mpa": 4.547473508864641e-13
+  },
+  "admissible_vf_max": 0.64,
+  "sweep": [
+    {
+      "vf": 0.0,
+      "E_mt_mpa": 2999.9999999999995,
+      "E_ds_mpa": 2999.9999999999995,
+      "E_hs_lo_mpa": 2999.9999999999995,
+      "E_hs_hi_mpa": 2999.999999999999,
+      "nu_mt": 0.35,
+      "rho_g_cc": 1.18,
+      "specific_E_mpa_cc_g": 2542.372881355932
+    },
+    {
+      "vf": 0.02,
+      "E_mt_mpa": 3042.6775067802027,
+      "E_ds_mpa": 3042.7309781604577,
+      "E_hs_lo_mpa": 3042.6775067802027,
+      "E_hs_hi_mpa": 3048.3874049575784,
+      "nu_mt": 0.34789753081818525,
+      "rho_g_cc": 1.1656,
+      "specific_E_mpa_cc_g": 2610.3959392417664
+    },
+    {
+      "vf": 0.04,
+      "E_mt_mpa": 3085.8477534874946,
+      "E_ds_mpa": 3086.0599784856286,
+      "E_hs_lo_mpa": 3085.8477534874946,
+      "E_hs_hi_mpa": 3097.141379464955,
+      "nu_mt": 0.34577131179022913,
+      "rho_g_cc": 1.1511999999999998,
+      "specific_E_mpa_cc_g": 2680.5487782205482
+    },
+    {
+      "vf": 0.06,
+      "E_mt_mpa": 3129.5193501858716,
+      "E_ds_mpa": 3129.99295050652,
+      "E_hs_lo_mpa": 3129.5193501858716,
+      "E_hs_hi_mpa": 3146.2661616905093,
+      "nu_mt": 0.34362092776655373,
+      "rho_g_cc": 1.1368,
+      "specific_E_mpa_cc_g": 2752.91990691931
+    },
+    {
+      "vf": 0.08,
+      "E_mt_mpa": 3173.7011087056503,
+      "E_ds_mpa": 3174.5358118299455,
+      "E_hs_lo_mpa": 3173.7011087056503,
+      "E_hs_hi_mpa": 3195.7660553504634,
+      "nu_mt": 0.34144595386911425,
+      "rho_g_cc": 1.1223999999999998,
+      "specific_E_mpa_cc_g": 2827.6025558674723
+    },
+    {
+      "vf": 0.1,
+      "E_mt_mpa": 3218.4020485885057,
+      "E_ds_mpa": 3219.6944446190655,
+      "E_hs_lo_mpa": 3218.4020485885057,
+      "E_hs_hi_mpa": 3245.6454309810574,
+      "nu_mt": 0.33924595520475004,
+      "rho_g_cc": 1.108,
+      "specific_E_mpa_cc_g": 2904.694989700817
+    },
+    {
+      "vf": 0.12,
+      "E_mt_mpa": 3263.63140324392,
+      "E_ds_mpa": 3265.4746920654657,
+      "E_hs_lo_mpa": 3263.63140324392,
+      "E_hs_hi_mpa": 3295.9087272404436,
+      "nu_mt": 0.33702048656834194,
+      "rho_g_cc": 1.0936,
+      "specific_E_mpa_cc_g": 2984.3008442245064
+    },
+    {
+      "vf": 0.14,
+      "E_mt_mpa": 3309.3986263259353,
+      "E_ds_mpa": 3311.8823547130623,
+      "E_hs_lo_mpa": 3309.3986263259353,
+      "E_hs_hi_mpa": 3346.5604522411595,
+      "nu_mt": 0.3347690921353478,
+      "rho_g_cc": 1.0792,
+      "specific_E_mpa_cc_g": 3066.529490665248
+    },
+    {
+      "vf": 0.16,
+      "E_mt_mpa": 3355.7133983394174,
+      "E_ds_mpa": 3358.923186761232,
+      "E_hs_lo_mpa": 3355.7133983394174,
+      "E_hs_hi_mpa": 3397.605184913979,
+      "nu_mt": 0.33249130514327113,
+      "rho_g_cc": 1.0647999999999997,
+      "specific_E_mpa_cc_g": 3151.496429695171
+    },
+    {
+      "vf": 0.18,
+      "E_mt_mpa": 3402.5856334855453,
+      "E_ds_mpa": 3406.602892103175,
+      "E_hs_lo_mpa": 3402.5856334855453,
+      "E_hs_hi_mpa": 3449.047576404046,
+      "nu_mt": 0.3301866475615957,
+      "rho_g_cc": 1.0504,
+      "specific_E_mpa_cc_g": 3239.3237180936267
+    },
+    {
+      "vf": 0.2,
+      "E_mt_mpa": 3450.0254867566982,
+      "E_ds_mpa": 3454.927120709943,
+      "E_hs_lo_mpa": 3450.0254867566982,
+      "E_hs_hi_mpa": 3500.892351500169,
+      "nu_mt": 0.32785462974969515,
+      "rho_g_cc": 1.0359999999999998,
+      "specific_E_mpa_cc_g": 3330.140431232335
+    },
+    {
+      "vf": 0.22,
+      "E_mt_mpa": 3498.0433612913785,
+      "E_ds_mpa": 3503.9014645083084,
+      "E_hs_lo_mpa": 3498.0433612913785,
+      "E_hs_hi_mpa": 3553.14431009817,
+      "nu_mt": 0.3254947501022035,
+      "rho_g_cc": 1.0215999999999998,
+      "specific_E_mpa_cc_g": 3424.0831649289144
+    },
+    {
+      "vf": 0.24,
+      "E_mt_mpa": 3546.649916000398,
+      "E_ds_mpa": 3553.5314534361623,
+      "E_hs_lo_mpa": 3546.649916000398,
+      "E_hs_hi_mpa": 3605.8083286993024,
+      "nu_mt": 0.323106494681308,
+      "rho_g_cc": 1.0071999999999999,
+      "specific_E_mpa_cc_g": 3521.296580619935
+    },
+    {
+      "vf": 0.26,
+      "E_mt_mpa": 3595.8560734760404,
+      "E_ds_mpa": 3603.8225509729705,
+      "E_hs_lo_mpa": 3595.8560734760404,
+      "E_hs_hi_mpa": 3658.889361944658,
+      "nu_mt": 0.3206893368353958,
+      "rho_g_cc": 0.9927999999999999,
+      "specific_E_mpa_cc_g": 3621.9339982635383
+    },
+    {
+      "vf": 0.28,
+      "E_mt_mpa": 3645.6730281965383,
+      "E_ds_mpa": 3654.780150711528,
+      "E_hs_lo_mpa": 3645.6730281965383,
+      "E_hs_hi_mpa": 3712.3924441866156,
+      "nu_mt": 0.31824273680346404,
+      "rho_g_cc": 0.9783999999999998,
+      "specific_E_mpa_cc_g": 3726.1580419016136
+    },
+    {
+      "vf": 0.3,
+      "E_mt_mpa": 3696.112255038814,
+      "E_ds_mpa": 3706.4095714821674,
+      "E_hs_lo_mpa": 3696.112255038814,
+      "E_hs_hi_mpa": 3766.3226910983635,
+      "nu_mt": 0.3157661413046642,
+      "rho_g_cc": 0.9639999999999999,
+      "specific_E_mpa_cc_g": 3834.1413434012597
+    },
+    {
+      "vf": 0.32,
+      "E_mt_mpa": 3747.1855181130586,
+      "E_ds_mpa": 3758.7160531992586,
+      "E_hs_lo_mpa": 3747.1855181130586,
+      "E_hs_hi_mpa": 3820.685301322589,
+      "nu_mt": 0.31325898311232964,
+      "rho_g_cc": 0.9495999999999998,
+      "specific_E_mpa_cc_g": 3946.0673105655637
+    },
+    {
+      "vf": 0.34,
+      "E_mt_mpa": 3798.9048799334837,
+      "E_ds_mpa": 3811.704752421844,
+      "E_hs_lo_mpa": 3798.9048799334837,
+      "E_hs_hi_mpa": 3875.4855581604143,
+      "nu_mt": 0.31072068061179453,
+      "rho_g_cc": 0.9351999999999998,
+      "specific_E_mpa_cc_g": 4062.130966567028
+    },
+    {
+      "vf": 0.36,
+      "E_mt_mpa": 3851.2827109401983,
+      "E_ds_mpa": 3865.3807382429395,
+      "E_hs_lo_mpa": 3851.2827109401983,
+      "E_hs_hi_mpa": 3930.7288313017943,
+      "nu_mt": 0.3081506373412814,
+      "rho_g_cc": 0.9207999999999998,
+      "specific_E_mpa_cc_g": 4182.539868527583
+    },
+    {
+      "vf": 0.38,
+      "E_mt_mpa": 3904.3316993880567,
+      "E_ds_mpa": 3919.7489875156443,
+      "E_hs_lo_mpa": 3904.3316993880567,
+      "E_hs_hi_mpa": 3986.4205785984973,
+      "nu_mt": 0.305548241515096,
+      "rho_g_cc": 0.9063999999999999,
+      "specific_E_mpa_cc_g": 4307.515114064494
+    },
+    {
+      "vf": 0.4,
+      "E_mt_mpa": 3958.0648616190583,
+      "E_ds_mpa": 3974.8143799325962,
+      "E_hs_lo_mpa": 3958.0648616190583,
+      "E_hs_hi_mpa": 4042.5663478809574,
+      "nu_mt": 0.302912865528328,
+      "rho_g_cc": 0.8919999999999999,
+      "specific_E_mpa_cc_g": 4437.292445761276
+    },
+    {
+      "vf": 0.42,
+      "E_mt_mpa": 4012.495552735744,
+      "E_ds_mpa": 4030.5816942293013,
+      "E_hs_lo_mpa": 4012.495552735744,
+      "E_hs_hi_mpa": 4099.171778820219,
+      "nu_mt": 0.3002438654422166,
+      "rho_g_cc": 0.8775999999999999,
+      "specific_E_mpa_cc_g": 4572.1234648310665
+    },
+    {
+      "vf": 0.44,
+      "E_mt_mpa": 4067.637477694024,
+      "E_ds_mpa": 4087.055602993621,
+      "E_hs_lo_mpa": 4067.637477694024,
+      "E_hs_hi_mpa": 4156.242604836332,
+      "nu_mt": 0.2975405804492935,
+      "rho_g_cc": 0.8632,
+      "specific_E_mpa_cc_g": 4712.276966744699
+    },
+    {
+      "vf": 0.46,
+      "E_mt_mpa": 4123.504702834763,
+      "E_ds_mpa": 4144.240667534492,
+      "E_hs_lo_mpa": 4123.504702834763,
+      "E_hs_hi_mpa": 4213.784655054521,
+      "nu_mt": 0.29480233231736996,
+      "rho_g_cc": 0.8487999999999999,
+      "specific_E_mpa_cc_g": 4858.0404133303055
+    },
+    {
+      "vf": 0.48,
+      "E_mt_mpa": 4180.111667874478,
+      "E_ds_mpa": 4202.1413340741965,
+      "E_hs_lo_mpa": 4180.111667874478,
+      "E_hs_hi_mpa": 4271.80385631053,
+      "nu_mt": 0.2920284248113873,
+      "rho_g_cc": 0.8343999999999999,
+      "specific_E_mpa_cc_g": 5009.72155785532
+    },
+    {
+      "vf": 0.5,
+      "E_mt_mpa": 4237.473198376684,
+      "E_ds_mpa": 4260.761928254537,
+      "E_hs_lo_mpa": 4237.473198376684,
+      "E_hs_hi_mpa": 4330.306235206621,
+      "nu_mt": 0.289218143092092,
+      "rho_g_cc": 0.8199999999999998,
+      "specific_E_mpa_cc_g": 5167.650241922786
+    },
+    {
+      "vf": 0.52,
+      "E_mt_mpa": 4295.604518726447,
+      "E_ds_mpa": 4320.106650015234,
+      "E_hs_lo_mpa": 4295.604518726447,
+      "E_hs_hi_mpa": 4389.297920219694,
+      "nu_mt": 0.2863707530904482,
+      "rho_g_cc": 0.8055999999999998,
+      "specific_E_mpa_cc_g": 5332.180385708104
+    },
+    {
+      "vf": 0.54,
+      "E_mt_mpa": 4354.521265632032,
+      "E_ds_mpa": 4380.179569644782,
+      "E_hs_lo_mpa": 4354.521265632032,
+      "E_hs_hi_mpa": 4448.785143863099,
+      "nu_mt": 0.283485500856635,
+      "rho_g_cc": 0.7911999999999998,
+      "specific_E_mpa_cc_g": 5503.692196198222
+    },
+    {
+      "vf": 0.56,
+      "E_mt_mpa": 4414.239502178804,
+      "E_ds_mpa": 4440.984621684101,
+      "E_hs_lo_mpa": 4414.239502178804,
+      "E_hs_hi_mpa": 4508.774244903717,
+      "nu_mt": 0.280561611882417,
+      "rho_g_cc": 0.7767999999999997,
+      "specific_E_mpa_cc_g": 5682.594621754384
+    },
+    {
+      "vf": 0.58,
+      "E_mt_mpa": 4474.775732461872,
+      "E_ds_mpa": 4502.525600801454,
+      "E_hs_lo_mpa": 4474.775732461872,
+      "E_hs_hi_mpa": 4569.271670635988,
+      "nu_mt": 0.27759829039560857,
+      "rho_g_cc": 0.7623999999999999,
+      "specific_E_mpa_cc_g": 5869.328085600569
+    },
+    {
+      "vf": 0.6,
+      "E_mt_mpa": 4536.146916825539,
+      "E_ds_mpa": 4564.806156512037,
+      "E_hs_lo_mpa": 4536.146916825539,
+      "E_hs_hi_mpa": 4630.283979214606,
+      "nu_mt": 0.2745947186252815,
+      "rho_g_cc": 0.7479999999999998,
+      "specific_E_mpa_cc_g": 6064.367535863022
+    },
+    {
+      "vf": 0.62,
+      "E_mt_mpa": 4598.370487739041,
+      "E_ds_mpa": 4627.829787684817,
+      "E_hs_lo_mpa": 4598.370487739041,
+      "E_hs_hi_mpa": 4691.817842047609,
+      "nu_mt": 0.2715500560362914,
+      "rho_g_cc": 0.7335999999999998,
+      "specific_E_mpa_cc_g": 6268.225855696623
+    },
+    {
+      "vf": 0.64,
+      "E_mt_mpa": 4661.464366339879,
+      "E_ds_mpa": 4691.599838501308,
+      "E_hs_lo_mpa": 4661.464366339879,
+      "E_hs_hi_mpa": 4753.8800462517565,
+      "nu_mt": 0.268463438531617,
+      "rho_g_cc": 0.7191999999999998,
+      "specific_E_mpa_cc_g": 6481.457684009844
+    }
+  ],
+  "closest_admissible_state": {
+    "vf": 0.64,
+    "eta": 0.935570543253382,
+    "E_mt_mpa": 4661.464366339879,
+    "E_ds_mpa": 4691.599838501308,
+    "E_best_mpa": 4676.532102420593,
+    "E_model_spread_mpa": 30.13547216142888,
+    "E_model_spread_pct": 0.6443978465545148,
+    "E_hs_lo_mpa": 4661.464366339879,
+    "E_hs_hi_mpa": 4753.8800462517565,
+    "nu_mt": 0.268463438531617,
+    "rho_g_cc": 0.7191999999999998,
+    "specific_E_mpa_cc_g": 6502.408373777244,
+    "crush_onset_mpa": 879.6853845328552
+  },
+  "requested_state": {
+    "computed": false,
+    "reason": "vf = 0.75 and eta = 1.02 are both physically inadmissible; computing a modulus there would require negative particle mass and an unrealisable monodisperse packing. No number is reported at these conditions."
+  },
+  "experimental_comparison": {
+    "available": true,
+    "n": 13,
+    "matrix_class": "epoxy",
+    "mape_pct": 340.5218222581968,
+    "median_ape_pct": 284.09372708090933,
+    "frac_inside_hs_band": 0.0,
+    "vf_obs": [
+      0.3,
+      0.6,
+      0.6,
+      0.6,
+      0.6,
+      0.6,
+      0.6,
+      0.6,
+      0.6,
+      0.6,
+      0.6,
+      0.6,
+      0.6
+    ],
+    "E_obs_mpa": [
+      1170.0,
+      1930.0,
+      1918.0,
+      1826.0,
+      1842.0,
+      585.7,
+      795.0,
+      783.9,
+      1920.0,
+      722.7,
+      703.3,
+      722.4,
+      1181.0
+    ],
+    "E_pred_mpa": [
+      3696.112255038814,
+      4536.146916825539,
+      4536.146916825539,
+      4536.146916825539,
+      4536.146916825539,
+      4536.146916825539,
+      4536.146916825539,
+      4536.146916825539,
+      4536.146916825539,
+      4536.146916825539,
+      4536.146916825539,
+      4536.146916825539,
+      4536.146916825539
+    ],
+    "grade_labels": [
+      "3M S60HS",
+      "3M Scotchlite K46/S22 glass microballoon",
+      "3M Scotchlite K46/S22/S32/S38 glass micr",
+      "3M Scotchlite S32/S38 glass microballoon",
+      "3M Scotchlite glass microballoons (plain"
+    ],
+    "note": "Experimental moduli commonly sit 20-40% below HP-MT because of matrix porosity, particle breakage during mixing and imperfect interfaces; the gap is reported, not tuned away. CAVEAT: the bundled epoxy/glass rows are mostly lighter grades (S22/S32/S38) and layered functionally-graded foams, not monodisperse K46, so this MAPE is an upper bound on the K46 model error, not a like-for-like validation."
+  },
+  "deliverable": {
+    "answer": "NOT COMPUTABLE AS POSED",
+    "explanation": "Both stated conditions violate hard physical constraints (see premise_checks).",
+    "closest_defensible_answer": {
+      "vf": 0.64,
+      "eta": 0.935570543253382,
+      "E_mpa": 4676.532102420593,
+      "E_uncertainty_mpa": 30.13547216142888,
+      "E_range_models_mpa": [
+        4691.599838501308,
+        4661.464366339879
+      ],
+      "E_hs_band_mpa": [
+        4661.464366339879,
+        4753.8800462517565
+      ],
+      "rho_g_cc": 0.7191999999999998
+    },
+    "how_to_make_the_task_well_posed": [
+      "keep vf <= 0.64 for monodisperse microballoons (a bimodal/polydisperse blend can reach ~0.7 but is a different microstructure than the one specified)",
+      "drop the eta = 1.02 override and use the K46 datasheet geometry (eta ~= 0.935), or state an eta in [0, 1) if a non-K46 wall thickness is intended",
+      "if a very light foam is the real goal, lower the particle true density (K20, K15, K1) at vf <= 0.64 instead of raising vf beyond packing"
+    ]
+  },
+  "failed_checks": [
+    "premise[eta_in_[0,1)]: requested eta = 1.02 is a radius ratio r_in/r_out; eta >= 1 implies inner radius >= outer radius, i.e. wall volume fraction 1 - eta^3 = -0.0612 < 0 and negative particle mass. Admissible range [0, 1).",
+    "premise[eta_consistent_with_named_grade]: K46 true density 0.460 g/cm^3 on a 2.54 g/cm^3 borosilicate shell fixes eta = 0.9356; the requested 1.02 contradicts the named grade even before the eta < 1 violation.",
+    "premise[vf_below_random_close_packing]: requested vf = 0.75 exceeds RCP = 0.64 for monodisperse spheres; random packings of equal spheres jam at ~0.64.",
+    "premise[vf_below_ordered_packing_maximum]: requested vf = 0.75 exceeds even the FCC/HCP maximum 0.7405; no equal-sphere arrangement whatsoever attains it, polydispersity excluded by the task."
+  ],
+  "n_failed_checks": 4
+}

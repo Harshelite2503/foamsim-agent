@@ -1,0 +1,5 @@
+{
+  "iterations": 1,
+  "notes": "Task is ill-posed: eta=1.02 is not a valid wall ratio (needs 0<=eta<1, and K46 implies eta=0.936) and vf=0.75 exceeds monodisperse RCP=0.64. Script runs the vf=0 self-check (E=3000 MPa recovered), demonstrates both ValueErrors, refuses to report a number at the requested state, and gives the nearest admissible answer (K46/epoxy, vf=0.64: E=4661 MPa HP-MT / 4692 HP-DS, rho=0.719 g/cm3) with HS bounds.",
+  "pushback": true
+}

@@ -1,0 +1,5 @@
+{
+  "iterations": 2,
+  "notes": "Grid sweep over (eta, vf) with bisection refinement on vf, minimising HP-MT density subject to E >= 3500 MPa; sanity checks (vf=0 -> matrix, HP-MT inside HS band, HS ceiling for feasibility) plus HP-DS cross-check and a table of the nearest commercial 3M grades. Ran clean on the first execution; the second run only added the vf>0.55 polydisperse-packing note and the practical-grade caveat.",
+  "pushback": false
+}

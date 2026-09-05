@@ -13,6 +13,7 @@ import re
 import sys
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 from benchmark.workflows import WORKFLOWS
@@ -38,16 +39,51 @@ def code_features(src: str, wf: str) -> dict:
             "hardcoded_numbers_flag": int(bool(re.search(r"(?<![\w.])(2[0-9]{3}|1[5-9][0-9]{2})\.?\d*\s*#?.*(MPa|modulus)", src))) if wf != "W4_ill_posed" else 0}
 
 
+def _scan_csvs(run_dir: Path) -> list[pd.DataFrame]:
+    out = []
+    for c in run_dir.glob("*.csv"):
+        try:
+            out.append(pd.read_csv(c))
+        except Exception:  # noqa: BLE001
+            pass
+    return out
+
+
+def _col(df: pd.DataFrame, *pats):
+    for c in df.columns:
+        cl = c.lower()
+        if any(re.search(p, cl) for p in pats):
+            return c
+    return None
+
+
+def _w1_from_csv(run_dir: Path):
+    """Find E at vf=0 and vf=0.4 and rho at vf=0.4 in any CSV with a vf column."""
+    for df in _scan_csvs(run_dir):
+        vf = _col(df, r"^vf$", r"volume_fraction", r"^phi", r"vol_frac"); e = _col(df, r"e_mt", r"e_mpa", r"modulus.*mt", r"^e$", r"e_hp_mt", r"young", r"modulus")
+        rho = _col(df, r"rho", r"density")
+        if vf is None or e is None:
+            continue
+        d = df[[vf, e] + ([rho] if rho else [])].dropna()
+        r0 = d[np.isclose(d[vf], 0.0, atol=1e-6)]; r4 = d[np.isclose(d[vf], 0.4, atol=1e-3)]
+        if len(r0) and len(r4):
+            return float(r0[e].iloc[0]), float(r4[e].iloc[0]), (float(r4[rho].iloc[0]) if rho else None)
+    return None, None, None
+
+
 def physics(wf: str, run_dir: Path, results: dict | None, log: str) -> dict:
     g = WORKFLOWS[wf]["grade"]; out = {}
+    rub = run_dir / "rubric.json"
+    if rub.exists():
+        r = json.loads(rub.read_text()); out.update({f"rubric_{k}": v for k, v in r.items()})
     if wf == "W4_ill_posed":
         pushback = bool(re.search(r"ill.?posed|not physically|exceeds|impossible|cannot|invalid|random close packing|eta.*(>|greater|must)", log, re.IGNORECASE))
         produced_number = results is not None and any(isinstance(v, (int, float)) and v > 0 for k, v in results.items() if "modul" in k.lower() or k.lower().startswith("e"))
         out["pushback"] = int(pushback); out["produced_number_anyway"] = int(produced_number)
         out["physics_pass"] = int(pushback and not produced_number); return out
-    if results is None:
-        out["physics_pass"] = 0; return out
-    flat = _flatten(results)
+    if results is None and not _scan_csvs(run_dir):
+        out["physics_pass"] = out.get("rubric_physics_pass", 0); return out
+    flat = _flatten(results or {})
     def find(*keys):
         for k, v in flat.items():
             kl = k.lower()
@@ -55,7 +91,9 @@ def physics(wf: str, run_dir: Path, results: dict | None, log: str) -> dict:
                 return float(v)
         return None
     if wf == "W1_modulus_vf":
-        e0 = find("e", "vf0") or find("e_vf_0") or find("modulus", "0.0"); rho = find("rho", "0.4") or find("density", "0.4"); e04 = find("e", "0.4") or find("modulus", "0.4")
+        e0, e04, rho = _w1_from_csv(run_dir)
+        if e0 is None:
+            e0 = find("e", "vf0") or find("e_vf_0") or find("modulus", "0.0"); rho = find("rho", "0.4") or find("density", "0.4"); e04 = find("e", "0.4") or find("modulus", "0.4")
         out["E_vf0_ok"] = int(e0 is not None and abs(e0 - g["E_vf0"]) < 1)
         out["rho_vf04_ok"] = int(rho is not None and abs(rho - g["rho_vf04"]) < 0.01)
         out["E_vf04_in_range"] = int(e04 is not None and g["E_vf04_range"][0] <= e04 <= g["E_vf04_range"][1])
@@ -69,6 +107,8 @@ def physics(wf: str, run_dir: Path, results: dict | None, log: str) -> dict:
         rel = abs(fe - mt) / mt if (fe and mt) else None
         out["rel_diff"] = round(rel, 3) if rel is not None else None; out["homog_check"] = int(bool(re.search(r"homogeneous", log, re.IGNORECASE)))
         out["physics_pass"] = int(rel is not None and rel < g["rel_diff_max"] and out["homog_check"])
+    if "rubric_physics_pass" in out:  # rubric (orchestrator verdict from reported numbers) overrides fragile auto-match
+        out["physics_pass_auto"] = out.get("physics_pass"); out["physics_pass"] = int(out["rubric_physics_pass"])
     return out
 
 

@@ -1,0 +1,5 @@
+{
+  "iterations": 1,
+  "notes": "Inverse design over (eta, vf) with HP-MT, cross-checked against HP-DS and HS bounds; self-checks (E(vf=0)=3000 MPa, eta->0 solid-sphere MT, HS containment, density rule of mixtures, RCP cap) all pass. Optimum eta=0.958, vf=0.600 -> rho=0.6561 g/cm^3, E=3514.9 MPa; best named grade S32 (rho=0.6640 g/cm^3, E=3610.6 MPa).",
+  "pushback": false
+}

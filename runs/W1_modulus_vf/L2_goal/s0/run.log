@@ -1,0 +1,64 @@
+Constituents
+  matrix   : epoxy  E=3000 MPa  nu=0.35  rho=1.18 g/cm3
+  shell    : glass  E=60 GPa  nu=0.21  rho=2.54 g/cm3
+  particle : K46  eta=0.9356  true density=0.460 g/cm3  (datasheet 0.46)
+self-check vf=0 -> E=3000.0 MPa, rho=1.180 g/cm3 (matrix)  OK
+self-check: HP-MT and HP-DS both inside HS bounds at every vf  OK
+
+modulus_vs_vf.csv
+  vf  density_g_cc  E_mt_mpa  E_ds_mpa  nu_mt  E_hs_lo_mpa  E_hs_hi_mpa
+   0          1.18      3000      3000   0.35         3000         3000
+0.05         1.144      3108      3108 0.3447         3108         3122
+ 0.1         1.108      3218      3220 0.3392         3218         3246
+0.15         1.072      3332      3335 0.3336         3332         3372
+ 0.2         1.036      3450      3455 0.3279         3450         3501
+0.25             1      3571      3579 0.3219         3571         3632
+ 0.3         0.964      3696      3706 0.3158         3696         3766
+0.35         0.928      3825      3838 0.3094         3825         3903
+ 0.4         0.892      3958      3975 0.3029         3958         4043
+0.45         0.856      4095      4116 0.2962         4095         4185
+ 0.5          0.82      4237      4261 0.2892         4237         4330
+0.55         0.784      4384      4410  0.282         4384         4479
+ 0.6         0.748      4536      4565 0.2746         4536         4630
+
+Experimental comparison: 13 FoamGPT epoxy/glass-microballoon quasi-static compression rows carrying a modulus
+      record_id                                                 sample_label  particle_true_density_g_cc  particle_volume_fraction  measured_density_g_cc  modulus_mpa  E_mt_mpa  rel_err_mt_pct  inside_hs_band
+W3162570773-000                                                          NSF                         0.6                       0.3                  0.953         1170      3696           215.9           False
+W2900342134-009                                              S38-S32-S32-S38                         NaN                       0.6                 0.6386         1930      4536             135           False
+W2900342134-008                                              S32-S38-S38-S32                         NaN                       0.6                 0.6357         1918      4536           136.5           False
+W2900342134-007                                              K46-S22-S22-K46                         NaN                       0.6                 0.6386         1826      4536           148.4           False
+W2900342134-006                                              S22-K46-K46-S22                         NaN                       0.6                 0.6415         1842      4536           146.3           False
+W2900342134-005  Plain Foam (non-gradient syntactic foam of similar density)                         NaN                       0.6                    NaN        585.7      4536           674.5           False
+W2900342134-002                                              S32-S38-S38-S32                         NaN                       0.6                  0.622          795      4536           470.6           False
+W2900342134-003                                              S38-S32-S32-S38                         NaN                       0.6                  0.628        783.9      4536           478.7           False
+W2900342134-010                                              K46-S38-S32-S22                         NaN                       0.6                 0.6402         1920      4536           136.3           False
+W2900342134-001                                              K46-S22-S22-K46                         NaN                       0.6                  0.623        722.7      4536           527.7           False
+W2900342134-000                                              S22-K46-K46-S22                         NaN                       0.6                  0.627        703.3      4536             545           False
+W2900342134-004                                              K46-S38-S32-S22                         NaN                       0.6                  0.629        722.4      4536           527.9           False
+W2900342134-011 Plain Foams (non-gradient syntactic foam of similar density)                         NaN                       0.6                    NaN         1181      4536           284.1           False
+
+MAPE  HP-MT vs experiment: 341 %   HP-DS vs experiment: 343 %
+experimental points inside the HS band: 0/13
+
+Grade-matched subset (1 row(s) that report their own particle true density):
+      record_id  particle_true_density_g_cc  particle_volume_fraction  modulus_mpa  E_mt_grade_matched_mpa  rel_err_grade_matched_pct
+W3162570773-000                         0.6                       0.3         1170                    3994                      241.3
+
+Density cross-check at vf=0.60: model (epoxy + K46) 0.748 g/cm3 vs measured mean 0.632 g/cm3 -> the experimental foams are lighter than an epoxy/K46 foam.
+
+CAVEAT — read the comparison, do not take the MAPE at face value:
+ * The bundled FoamGPT snapshot contains NO monolithic epoxy/K46 compression-modulus series. All 12
+   vf=0.60 rows come from ONE study of layered functionally graded syntactic foams (FGSFs) built from
+   S22/S32/S38/K46 layers, and each sample appears twice with ~2.5x different moduli (two loading
+   orientations relative to the layers). A layered, orientation-dependent FGSF is not the isotropic
+   random-dispersion microstructure the Mori-Tanaka / HS theory describes.
+ * Those foams use much lighter grades than K46 (S22 = 0.22 g/cm3 vs K46 = 0.46), i.e. thinner walls
+   and a more compliant particle; the density cross-check above confirms it.
+ * The single grade-matched row (S60HS, true density 0.60, vf=0.30) is the only near-like-for-like
+   point and still sits ~2x below the model, consistent with the 20-40 %+ shortfall expected from
+   matrix porosity and particle breakage, amplified here by an unreported test standard.
+ * Conclusion: the analytical curve is the deliverable; the experimental rows bracket it only in
+   order of magnitude and cannot validate it. No constant was tuned and no value was read off a plot.
+
+
+wrote modulus_vs_vf.csv, experimental_comparison.csv, modulus_vs_vf.png

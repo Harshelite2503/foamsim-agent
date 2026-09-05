@@ -1,0 +1,5 @@
+{
+  "iterations": 2,
+  "notes": "Grid search over eta in [0.80,0.97] x vf in [0,0.60] with HP-MT (HP-DS cross-check, HS bounds on every point). Second run only refined the eta step from 0.005 to 0.001 so the continuous optimum was not coarser than the catalogue-grade optimum; no errors in either run.",
+  "pushback": false
+}

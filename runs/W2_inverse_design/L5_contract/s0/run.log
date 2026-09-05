@@ -1,0 +1,31 @@
+
+==============================================================================
+PHYSICS SANITY SUMMARY  (units: MPa, g/cm^3)
+==============================================================================
+Model: HP-MT (hollow-particle Mori-Tanaka via Hashin equivalent solid sphere)
+  cross-check: HP-DS (differential scheme, McLaughlin 1977); envelope: Hashin-Shtrikman two-phase bounds (matrix + equivalent particle)
+
+Self-check   E(vf=0) = 3000.000 MPa vs neat epoxy 3000.0 MPa  ->  OK
+             matrix alone reaches target? False (3000 < 3500 MPa, so reinforcement is required)
+
+Optimum      eta = 0.9575  (particle true density 0.310 g/cm^3)
+             vf  = 0.6000   (RCP limit 0.64, requested max 0.6)
+             rho = 0.6582 g/cm^3  (44.2 % lighter than neat epoxy)
+             E   = 3540.4 MPa  (target 3500 MPa, margin +40.4 MPa)
+             nu  = 0.2715; specific E = 5379 MPa cm^3/g
+
+HS check     E_lo = 3540.4 <= E_HP-MT = 3540.4 <= E_hi = 3548.1 MPa  -> inside band
+             target 3500 MPa is below the HS upper bound (max over grid 10729 MPa) -> attainable
+
+Uncertainty  HP-DS gives 3542.7 MPa at the optimum (0.1 % from HP-MT); DS meets target: True
+             HS band width at optimum = 0.2 % of E
+             model spread = HP-MT vs HP-DS; experimental syntactic foams typically fall 20-40 % below HP-MT (matrix porosity, balloon breakage).
+
+Catalogue    lightest feasible 3M grade: S32 (eta=0.9561) at vf=0.600 -> rho=0.6640 g/cm^3, E=3610.6 MPa
+
+Trade-off    2846/4209 grid designs feasible; Pareto front has 71 points (see tradeoff.png).
+
+Validation   ALL CHECKS PASSED
+==============================================================================
+
+Wrote: json=./results.json, csv=./results.csv, png=./tradeoff.png

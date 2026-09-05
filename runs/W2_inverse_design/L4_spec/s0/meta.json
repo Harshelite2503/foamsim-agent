@@ -1,0 +1,5 @@
+{
+  "iterations": 2,
+  "notes": "Grid inverse design over eta (0.80-0.97) x vf (0-0.60) with HP-MT (primary), HP-DS (model spread) and HS bounds (feasibility); self-checks E(vf=0)=3000 MPa, eta=0 solid-sphere limit, all 8349 points inside HS bounds. Run 1 succeeded; run 2 only fixed a print sign and added an active-constraint note.",
+  "pushback": false
+}

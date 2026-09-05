@@ -1,0 +1,5 @@
+{
+ "physics_pass": 1,
+ "pushback": 0,
+ "notes": "CLI+compute/validate; 7/7 checks; 4 iterations; noted MT==HS lower bound identity"
+}

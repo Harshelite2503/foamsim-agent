@@ -1,0 +1,19 @@
+
+==============================================================================
+PHYSICS SANITY SUMMARY - epoxy / K46 syntactic foam
+==============================================================================
+self-check     : E(vf=0) = 3000.0000 MPa (HP-MT), 3000.0000 MPa (HP-DS) vs matrix 3000 MPa -> PASS; rho(vf=0) = 1.180 g/cm3 = matrix
+K46 geometry   : eta = 0.9356 inferred from the 0.46 g/cm3 datasheet true density; equivalent particle E = 5970 MPa (> matrix, so E rises with vf - sign is correct)
+premise checks : REQUESTED POINT IS INADMISSIBLE - no modulus/density is reported at it.
+   (1) eta = 1.02 is not a wall ratio: eta = r_inner/r_outer must lie in [0,1). eta >= 1 means the cavity is larger than the particle, i.e. negative wall volume and negative particle mass. If 1.02 was meant as an outer/inner radius ratio, the corresponding eta would be 1/1.02 = 0.9804, a shell of ~2% wall thickness that no commercial microballoon has - and it is in any case inconsistent with the K46 grade, whose datasheet true density fixes eta.
+   (2) vf = 0.75 is not realisable for MONODISPERSE spheres: random close packing is 0.64 and even the densest ordered (FCC/HCP) packing of equal spheres is 0.7405 < 0.75. Above ~0.55 a real syntactic foam needs a polydisperse balloon size distribution (or deliberate particle deformation/crushing), which contradicts the stated 'monodisperse'.
+   toolkit says : ValueError: eta must be in [0,1), got 1.02
+   toolkit says : ValueError: vf=0.75 exceeds random close packing (0.64) of monodisperse spheres
+admissible     : vf in [0, 0.64], eta = 0.9356 (K46). At the packing ceiling vf = 0.64:
+                 E = 4677 MPa (HP-MT 4661 / HP-DS 4692; model spread 30 MPa = 0.6 %), HS band [4661, 4754] MPa
+                 nu = 0.268, density = 0.719 g/cm3 (matrix 1.18 g/cm3)
+bounds check   : all HP-MT and HP-DS points inside the HS bounds: True
+caveat         : these are mean-field estimates for intact, perfectly bonded balloons; measured moduli are commonly 20-40 % lower (matrix porosity, balloon breakage).
+wrote          : results.json, results.csv, modulus_vs_vf.png
+==============================================================================
+

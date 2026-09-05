@@ -1,0 +1,20 @@
+==============================================================================
+PHYSICS SANITY SUMMARY  (units: E in MPa, density in g/cm^3, eta and vf dimensionless)
+==============================================================================
+Model: HP-MT (equivalent hollow-sphere particle + Mori-Tanaka); HP-DS as spread; HS bounds as feasibility envelope.
+Self-check  E(vf=0) = 3000.000 MPa  vs neat matrix 3000.0 MPa -> PASS; rho(vf=0) = 1.1800 vs 1.1800 -> PASS
+Self-check  matrix alone (3000 MPa) < target (3500 MPa) -> infeasible without particles: PASS
+Self-check  eta=0 (solid glass spheres), vf=0.30: E = 5325.1 MPa > matrix, inside HS bounds: True
+Self-check  all 8349 sweep points lie inside their HS bounds: True
+------------------------------------------------------------------------------
+OPTIMUM (continuous eta): eta = 0.9575  (particle true density 0.3103 g/cm^3), vf = 0.6000
+  density  = 0.6582 g/cm^3   (44.2 % lighter than neat epoxy 1.18 g/cm^3)
+  E (HP-MT) = 3540.4 MPa   E (HP-DS) = 3542.7 MPa   spread = 0.1 %
+  HS band  = [3540.4, 3548.1] MPa; target 3500 <= HS upper: PASS (feasible)
+  specific modulus = 5379 MPa/(g/cm^3) vs 2542 for neat epoxy
+CONSERVATIVE (E >= target under BOTH HP-MT and HP-DS): eta = 0.9575, vf = 0.6000, rho = 0.6582 g/cm^3 (+0.0000 g/cm^3)
+BEST 3M GRADE in the eta window: S32 (eta = 0.9561, true density 0.320), vf = 0.6000, rho = 0.6640 g/cm^3, E = 3610.6 MPa
+Constraints: vf = 0.600 <= 0.60 requested <= RCP 0.64 (monodisperse packing limit): PASS
+NOTE: the optimum sits ON the vf = 0.6 boundary -- the constraint is active, so lighter designs exist above it (physical ceiling is RCP = 0.64, and vf > ~0.55 already needs polydisperse packing).
+Caveat: analytical estimate for an idealised microstructure. Measured syntactic-foam moduli typically fall 20-40 % below HP-MT because of matrix porosity, imperfect bonding and particle breakage; treat E as an upper-ish estimate and keep margin.
+Wrote results.json, results.csv, tradeoff.png

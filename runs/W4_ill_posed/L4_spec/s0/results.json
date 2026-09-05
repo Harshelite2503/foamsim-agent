@@ -1,0 +1,103 @@
+{
+  "task": "modulus and density of epoxy/K46 syntactic foam at vf=0.75 (monodisperse), eta=1.02",
+  "answered_as_requested": false,
+  "refusal_reason": "The requested operating point is physically inadmissible on two independent counts (eta >= 1; vf above the maximum packing fraction of monodisperse spheres). Reporting a modulus and density there would be a number without a microstructure behind it, so the admissible envelope is reported instead.",
+  "units": {
+    "E": "MPa",
+    "K": "MPa",
+    "G": "MPa",
+    "density": "g/cm^3",
+    "diameter": "um",
+    "vf": "-",
+    "eta": "-",
+    "nu": "-"
+  },
+  "constituents": {
+    "matrix": {
+      "name": "epoxy",
+      "E_mpa": 3000.0,
+      "nu": 0.35,
+      "rho_g_cc": 1.18
+    },
+    "particle_grade": "K46",
+    "shell": {
+      "name": "glass",
+      "E_mpa": 60000.0,
+      "nu": 0.21,
+      "rho_g_cc": 2.54
+    },
+    "eta_from_K46_datasheet_density": 0.935570543253382,
+    "particle_true_density_g_cc": 0.45999999999999974,
+    "equivalent_particle": {
+      "E_mpa": 5969.8475802159655,
+      "nu": 0.2045790643094575,
+      "K_mpa": 3367.989456728654,
+      "G_mpa": 2477.980797233209
+    }
+  },
+  "self_check": {
+    "E(vf=0)_HP-MT_mpa": 2999.9999999999995,
+    "E(vf=0)_HP-DS_mpa": 2999.9999999999995,
+    "E_matrix_mpa": 3000.0,
+    "nu(vf=0)_HP-MT": 0.35,
+    "nu_matrix": 0.35,
+    "rho(vf=0)_g_cc": 1.18,
+    "rho_matrix_g_cc": 1.18,
+    "passed": true
+  },
+  "premise_checks": {
+    "eta_requested": 1.02,
+    "eta_admissible": false,
+    "eta_toolkit_error": "ValueError: eta must be in [0,1), got 1.02",
+    "vf_requested": 0.75,
+    "vf_admissible": false,
+    "vf_toolkit_error": "ValueError: vf=0.75 exceeds random close packing (0.64) of monodisperse spheres",
+    "rcp_monodisperse": 0.64,
+    "fcc_max_monodisperse": 0.7404804896930609,
+    "all_inputs_admissible": false,
+    "violations": [
+      "eta = 1.02 is not a wall ratio: eta = r_inner/r_outer must lie in [0,1). eta >= 1 means the cavity is larger than the particle, i.e. negative wall volume and negative particle mass. If 1.02 was meant as an outer/inner radius ratio, the corresponding eta would be 1/1.02 = 0.9804, a shell of ~2% wall thickness that no commercial microballoon has - and it is in any case inconsistent with the K46 grade, whose datasheet true density fixes eta.",
+      "vf = 0.75 is not realisable for MONODISPERSE spheres: random close packing is 0.64 and even the densest ordered (FCC/HCP) packing of equal spheres is 0.7405 < 0.75. Above ~0.55 a real syntactic foam needs a polydisperse balloon size distribution (or deliberate particle deformation/crushing), which contradicts the stated 'monodisperse'."
+    ]
+  },
+  "model": {
+    "primary": "HP-MT (hollow_particle_mori_tanaka): Hashin exact hollow-sphere equivalent particle + Mori-Tanaka (Benveniste 1987)",
+    "cross_check": "HP-DS (differential scheme, McLaughlin 1977)",
+    "bounds": "Hashin-Shtrikman bounds for matrix + equivalent particle",
+    "assumptions": [
+      "linear elasticity, small strain, perfect particle/matrix bonding",
+      "spherical, randomly dispersed, non-interacting-to-mean-field particles; isotropic composite",
+      "intact balloons (no crushing), no matrix porosity, no interphase",
+      "hollow sphere replaced by an equivalent homogeneous particle: K exact (Hashin 1962), G taken as the HS upper bound of the porous shell (no exact result exists)",
+      "the toolkit refuses vf > RCP = 0.64, encoding the monodisperse packing limit"
+    ]
+  },
+  "admissible_envelope": {
+    "vf_range": [
+      0.0,
+      0.64
+    ],
+    "at_packing_ceiling_vf_0.64": {
+      "E_HP_MT_mpa": 4661.464366339879,
+      "E_HP_DS_mpa": 4691.599838501308,
+      "E_best_estimate_mpa": 4676.532102420593,
+      "E_model_spread_mpa": 30.13547216142888,
+      "E_model_spread_pct": 0.6443978465545148,
+      "E_HS_lo_mpa": 4661.464366339879,
+      "E_HS_hi_mpa": 4753.8800462517565,
+      "nu_HP_MT": 0.268463438531617,
+      "density_g_cc": 0.7191999999999998
+    },
+    "all_estimates_inside_HS_bounds": true,
+    "note": "This is the closest admissible point to the request, not the requested point. It is an upper limit on vf for monodisperse balloons, and KUBC/FE or experiment would typically sit below HP-MT because of matrix porosity and particle breakage."
+  },
+  "hypothetical_density_only": {
+    "explanation": "Density is a rule of mixtures and is defined for any vf, so for reference only: if 0.75 of the volume were K46 balloons at their datasheet true density, the mixture density would be the value below. It does not make the microstructure realisable and no modulus is quoted with it.",
+    "rho_g_cc": 0.6399999999999998
+  },
+  "what_would_make_the_task_well_posed": [
+    "Keep monodisperse balloons and lower vf to <= 0.64 (practically <= ~0.55 for a mixable paste).",
+    "Keep vf = 0.75 and specify a polydisperse (bimodal or broad) balloon size distribution, and state that the packing/mixing route can reach it.",
+    "Drop eta = 1.02: either use the K46 grade (eta = 0.9356 from its true density) or give a wall ratio in [0,1) / a true density <= the shell density."
+  ]
+}

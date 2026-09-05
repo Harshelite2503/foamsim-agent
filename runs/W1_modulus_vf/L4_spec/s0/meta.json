@@ -1,0 +1,5 @@
+{
+  "iterations": 3,
+  "notes": "HP-MT + HP-DS + HS bounds sweep for epoxy/K46, vf 0..0.6; all three self-checks pass (E(0)=3000 MPa, rho(0.4)=0.892, estimates inside HS). Reran twice to make the experimental comparison honest: FoamGPT epoxy/glass rows are mostly thin-walled S22/S32/S38 graded foams, so each row is now predicted with the particle implied by its own reported/back-calculated true density, and the below-HS-lower-bound measurements are flagged as evidence of a third compliant phase rather than tuned away.",
+  "pushback": false
+}
