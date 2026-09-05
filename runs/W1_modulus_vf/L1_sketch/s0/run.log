@@ -1,0 +1,70 @@
+=== Constituents ===
+matrix   epoxy : E=3000 MPa, nu=0.350, rho=1.180 g/cm^3
+particle K46   : shell E=60000 MPa, nu=0.210, rho_shell=2.540 g/cm^3
+                 eta (inner/outer radius ratio) = 0.9356, diameter = 40.0 um
+
+=== HP-MT / HP-DS modulus vs volume fraction (E in MPa) ===
+       vf  E_MT_mpa  E_DS_mpa  E_HS_lo_mpa  E_HS_hi_mpa     nu_MT  rho_g_cc  specific_E_MT
+    0.000  3000.000  3000.000     3000.000     3000.000     0.350     1.180       2542.373
+    0.050  3107.620  3107.951     3107.620     3121.657     0.345     1.144       2716.451
+    0.100  3218.402  3219.694     3218.402     3245.645     0.339     1.108       2904.695
+    0.150  3332.487  3335.323     3332.487     3372.033     0.334     1.072       3108.663
+    0.200  3450.025  3454.927     3450.025     3500.892     0.328     1.036       3330.140
+    0.250  3571.177  3578.594     3571.177     3632.296     0.322     1.000       3571.177
+    0.300  3696.112  3706.410     3696.112     3766.323     0.316     0.964       3834.141
+    0.350  3825.011  3838.457     3825.011     3903.051     0.309     0.928       4121.779
+    0.400  3958.065  3974.814     3958.065     4042.566     0.303     0.892       4437.292
+    0.450  4095.480  4115.559     4095.480     4184.954     0.296     0.856       4784.439
+    0.500  4237.473  4260.762     4237.473     4330.306     0.289     0.820       5167.650
+    0.550  4384.279  4410.490     4384.279     4478.717     0.282     0.784       5592.193
+    0.600  4536.147  4564.806     4536.147     4630.284     0.275     0.748       6064.368
+
+(wrote modulus_vs_vf.csv)
+
+=== Self-checks ===
+vf=0 recovers the matrix: E=3000.0 MPa, rho=1.180 g/cm^3  [OK]
+both estimates lie inside the HS bounds at every vf  [OK]
+RCP limit for monodisperse spheres = 0.64; sweep stops at vf=0.60  [OK]
+K46 is a stiff particle -> E increases with vf (3000 -> 4536 MPa)
+
+=== Comparison with FoamGPT experimental data (epoxy / glass microballoons) ===
+13 epoxy/GMB compression rows with a reported modulus; 6 mention K46, of which 0 are K46-only specimens.
+
+-- all epoxy / glass-microballoon grades: 13 points --
+      record_id                                               particle_grade  particle_volume_fraction  modulus_mpa  E_MT_mpa  E_DS_mpa  rel_err_MT_pct  in_HS_band
+W3162570773-000                                                     3M S60HS                      0.30      1170.00   3696.11   3706.41          215.91       False
+W2900342134-009 3M Scotchlite S32/S38 glass microballoons, layer sequence S3                      0.60      1930.00   4536.15   4564.81          135.03       False
+W2900342134-008 3M Scotchlite S32/S38 glass microballoons, layer sequence S3                      0.60      1918.00   4536.15   4564.81          136.50       False
+W2900342134-007 3M Scotchlite K46/S22 glass microballoons, layer sequence K4                      0.60      1826.00   4536.15   4564.81          148.42       False
+W2900342134-006 3M Scotchlite K46/S22 glass microballoons, layer sequence S2                      0.60      1842.00   4536.15   4564.81          146.26       False
+W2900342134-005 3M Scotchlite glass microballoons (plain, single-layer foam                       0.60       585.70   4536.15   4564.81          674.48       False
+W2900342134-002 3M Scotchlite S32/S38 glass microballoons, layer sequence S3                      0.60       795.00   4536.15   4564.81          470.58       False
+W2900342134-003 3M Scotchlite S32/S38 glass microballoons, layer sequence S3                      0.60       783.90   4536.15   4564.81          478.66       False
+W2900342134-010 3M Scotchlite K46/S22/S32/S38 glass microballoons, layer seq                      0.60      1920.00   4536.15   4564.81          136.26       False
+W2900342134-001 3M Scotchlite K46/S22 glass microballoons, layer sequence K4                      0.60       722.70   4536.15   4564.81          527.67       False
+W2900342134-000 3M Scotchlite K46/S22 glass microballoons, layer sequence S2                      0.60       703.30   4536.15   4564.81          544.98       False
+W2900342134-004 3M Scotchlite K46/S22/S32/S38 glass microballoons, layer seq                      0.60       722.40   4536.15   4564.81          527.93       False
+W2900342134-011 3M Scotchlite glass microballoons (plain, single-layer foam                       0.60      1181.00   4536.15   4564.81          284.09       False
+   MAPE  HP-MT = 340.5% , HP-DS = 343.2% ; inside HS band: 0/13
+
+-- K46-only specimens: no rows --
+
+-- K46 + other grades (layered / FGM - not comparable): 6 points --
+      record_id                                               particle_grade  particle_volume_fraction  modulus_mpa  E_MT_mpa  E_DS_mpa  rel_err_MT_pct  in_HS_band
+W2900342134-007 3M Scotchlite K46/S22 glass microballoons, layer sequence K4                      0.60      1826.00   4536.15   4564.81          148.42       False
+W2900342134-006 3M Scotchlite K46/S22 glass microballoons, layer sequence S2                      0.60      1842.00   4536.15   4564.81          146.26       False
+W2900342134-010 3M Scotchlite K46/S22/S32/S38 glass microballoons, layer seq                      0.60      1920.00   4536.15   4564.81          136.26       False
+W2900342134-001 3M Scotchlite K46/S22 glass microballoons, layer sequence K4                      0.60       722.70   4536.15   4564.81          527.67       False
+W2900342134-000 3M Scotchlite K46/S22 glass microballoons, layer sequence S2                      0.60       703.30   4536.15   4564.81          544.98       False
+W2900342134-004 3M Scotchlite K46/S22/S32/S38 glass microballoons, layer seq                      0.60       722.40   4536.15   4564.81          527.93       False
+   MAPE  HP-MT = 338.6% , HP-DS = 341.4% ; inside HS band: 0/6
+
+(wrote experiment_comparison.csv)
+
+Caveats:
+ - Every K46-labelled row in this dataset is a multi-grade layered / functionally graded panel from a
+   single paper, so there is no monolithic epoxy+K46 modulus-vs-vf curve here to validate against;
+   the model curve above is a prediction, not a fit.
+ - Measured syntactic-foam moduli typically sit 20-40% below HP-MT (matrix porosity, imperfect
+   interfacial bonding, particle breakage); larger gaps here also reflect the grade mismatch.
+ - No constant was tuned and no experimental value was hard-coded to close that gap.

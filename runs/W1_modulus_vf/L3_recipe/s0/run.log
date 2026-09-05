@@ -1,0 +1,79 @@
+==============================================================================
+Epoxy / 3M K46 glass-microballoon syntactic foam: compressive modulus vs vf
+==============================================================================
+matrix   : epoxy  E=3000 MPa  nu=0.35  rho=1.18 g/cm^3 (K=3333.3 MPa, G=1111.1 MPa)
+shell    : glass  E=60000 MPa  nu=0.21  rho=2.54 g/cm^3
+particle : K46  eta=r_i/r_o=0.9356  wall vol frac=0.1811  true density=0.460 g/cm^3  d=40 um
+equivalent solid particle: E=5969.8 MPa  nu=0.2046  K=3368.0 MPa  G=2478.0 MPa
+Units throughout: modulus MPa, density g/cm^3, vf dimensionless.
+
+-- Self-checks (independent known results) ----------------------------------
+  [PASS] E(vf=0) == matrix E = 3000 MPa (HP-MT): HP-MT E(0) = 3000.000000 MPa
+  [PASS] E(vf=0) == matrix E = 3000 MPa (HP-DS): HP-DS E(0) = 3000.000000 MPa
+  [PASS] nu(vf=0) == matrix nu = 0.35: nu(0) = 0.350000
+  [PASS] density(vf=0.4) == 0.892 g/cm^3: rho(0.4) = 0.892000 g/cm^3
+  [PASS] all HP-MT and HP-DS estimates inside HS bounds: 26/26 estimates inside band
+  [PASS] eta=0 limit reproduces solid-sphere Mori-Tanaka (vf=0.3): 5325.143 vs 5325.143 MPa
+
+-- Premise checks ------------------------------------------------------------
+  vf range 0-0.6 is below random close packing RCP=0.64 (monodisperse spheres): OK, but
+  vf > ~0.55 in practice requires polydisperse packing; the vf=0.60 point is at the edge of
+  what is realisable and real foams at that loading show particle-particle contact and damage.
+  eta=0.9356 < 1 and true density 0.46 <= shell density 2.54: physically valid.
+  Models are linear-elastic estimates; they do not capture particle crushing or matrix porosity.
+
+-- Sweep: vf, density, modulus (MPa) ----------------------------------------
+       vf  density_g_cc  E_HPMT_mpa  E_HPDS_mpa  E_HS_lower_mpa  E_HS_upper_mpa  model_spread_pct
+    0.000         1.180    3000.000    3000.000        3000.000        3000.000             0.000
+    0.050         1.144    3107.620    3107.951        3107.620        3121.657             0.011
+    0.100         1.108    3218.402    3219.694        3218.402        3245.645             0.040
+    0.150         1.072    3332.487    3335.323        3332.487        3372.033             0.085
+    0.200         1.036    3450.025    3454.927        3450.025        3500.892             0.142
+    0.250         1.000    3571.177    3578.594        3571.177        3632.296             0.208
+    0.300         0.964    3696.112    3706.410        3696.112        3766.323             0.279
+    0.350         0.928    3825.011    3838.457        3825.011        3903.051             0.352
+    0.400         0.892    3958.065    3974.814        3958.065        4042.566             0.423
+    0.450         0.856    4095.480    4115.559        4095.480        4184.954             0.490
+    0.500         0.820    4237.473    4260.762        4237.473        4330.306             0.550
+    0.550         0.784    4384.279    4410.490        4384.279        4478.717             0.598
+    0.600         0.748    4536.147    4564.806        4536.147        4630.284             0.632
+
+Written: modulus_vs_vf.csv
+Model spread (|HP-MT - HP-DS|/HP-MT): max 0.63% at vf=0.60; HS band width at vf=0.6: 4536-4630 MPa.
+
+-- Experimental comparison (FoamGPT: epoxy / glass microballoon, quasi-static compression) --
+      record_id       vf  measured_density_g_cc  particle_true_density_g_cc            true_density_source  modulus_mpa  E_HPMT_K46_mpa  E_HPMT_grade_mpa  rel_error_grade_pct  inside_HS_grade
+W3162570773-000    0.300                  0.953                       0.600                         stated     1170.000        3696.112          3993.620              241.335            False
+W2900342134-009    0.600                  0.639                       0.278 inferred from measured density     1930.000        4536.147          3298.526               70.908            False
+W2900342134-008    0.600                  0.636                       0.273 inferred from measured density     1918.000        4536.147          3261.838               70.065            False
+W2900342134-007    0.600                  0.639                       0.278 inferred from measured density     1826.000        4536.147          3298.526               80.642            False
+W2900342134-006    0.600                  0.641                       0.282 inferred from measured density     1842.000        4536.147          3334.990               81.053            False
+W2900342134-005    0.600                    NaN                         NaN                        unknown      585.700        4536.147               NaN                  NaN            False
+W2900342134-002    0.600                  0.622                       0.250 inferred from measured density      795.000        4536.147          3085.448              288.107            False
+W2900342134-003    0.600                  0.628                       0.260 inferred from measured density      783.900        4536.147          3163.331              303.538            False
+W2900342134-010    0.600                  0.640                       0.280 inferred from measured density     1920.000        4536.147          3318.671               72.847            False
+W2900342134-001    0.600                  0.623                       0.252 inferred from measured density      722.700        4536.147          3098.498              328.739            False
+W2900342134-000    0.600                  0.627                       0.258 inferred from measured density      703.300        4536.147          3150.420              347.948            False
+W2900342134-004    0.600                  0.629                       0.262 inferred from measured density      722.400        4536.147          3176.215              339.675            False
+W2900342134-011    0.600                    NaN                         NaN                        unknown     1181.000        4536.147               NaN                  NaN            False
+
+  n = 13 experimental points from 2 papers, vf 0.30-0.60.
+  MAPE against the K46 curve            : 341%  (dominated by grade mismatch -- these
+     records are lighter S22/S32/S38 balloons and multi-layer graded foams, not epoxy/K46.)
+  MAPE with grade-matched particle HP-MT : 202%  (HP-DS 203%), n=11
+  Experimental points inside their grade-matched HS band: 0/11
+  Mean signed error (grade-matched HP-MT - experiment) = +202%
+  Interpretation: even grade-matched, the analytical estimates lie ABOVE every measurement, and several
+  measured moduli fall BELOW the HS lower bound -- which no microstructure of perfectly bonded intact
+  balloons in dense epoxy can do. The usual causes are matrix porosity, weak/debonded interfaces and
+  balloon breakage during mixing/cure, plus the fact that reported 'compressive modulus' is often a
+  machine-compliance-affected secant slope. Literature typically reports experiment 20-40% below HP-MT;
+  the gap here is larger because these records are 0.6 vf graded laminates. No constant was tuned.
+  Written: experimental_comparison.csv
+  Written: modulus_vs_vf.png
+
+-- Summary ------------------------------------------------------------------
+  HP-MT (primary model): E rises from 3000 MPa at vf=0 to 4536 MPa at vf=0.60,
+  while density falls from 1.180 to 0.748 g/cm^3 (specific modulus 6064 -> vs 2542 MPa/(g/cm^3) for neat epoxy).
+  Uncertainty: model spread HP-MT vs HP-DS <= 0.6%; the HS band is much wider
+  and is a bound, not an uncertainty; experiment scatters below both estimates (see MAPE above).

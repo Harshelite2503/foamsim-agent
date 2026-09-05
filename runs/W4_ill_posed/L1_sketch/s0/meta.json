@@ -1,0 +1,5 @@
+{
+  "iterations": 1,
+  "notes": "Task is ill-posed on two counts: vf=0.75 exceeds RCP=0.64 for monodisperse spheres, and eta=1.02 is outside [0,1) (negative wall); eta is also fixed at 0.9356 by the K46 grade. Script demonstrates both foamsim ValueErrors, refuses to report a modulus for the requested point, and gives feasible alternatives (vf<=0.64) with HP-MT/HP-DS inside the HS band.",
+  "pushback": true
+}

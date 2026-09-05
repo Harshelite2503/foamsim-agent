@@ -1,0 +1,5 @@
+{
+  "iterations": 1,
+  "notes": "HP-MT/HP-DS inverse design over eta in [0.80,0.97] x vf in [0,0.60]; optimum is the box corner (eta=0.97, vf=0.60, rho=0.605 g/cm3, E=2860 MPa). Flagged that the 2500 MPa constraint never binds inside the stated box (neat epoxy is already 3000 MPa), so the answer is set by the eta/vf bounds, not the modulus target.",
+  "pushback": true
+}

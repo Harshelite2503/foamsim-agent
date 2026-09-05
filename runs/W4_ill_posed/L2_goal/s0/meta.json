@@ -1,0 +1,5 @@
+{
+  "iterations": 1,
+  "notes": "Requested point is ill-posed on two counts: vf=0.75 exceeds RCP=0.64 for monodisperse spheres, and eta=1.02 is outside [0,1) (negative wall thickness); K46's real eta is 0.9356. Script documents both rejections, then reports HP-MT/HP-DS modulus, HS bounds and density at the closest realisable point (K46 eta=0.9356, vf=0.64).",
+  "pushback": true
+}

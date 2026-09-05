@@ -1,0 +1,20 @@
+record_id,particle_grade,particle_volume_fraction,modulus_mpa,E_MT_mpa,E_DS_mpa,rel_err_MT_pct,in_HS_band,subset
+W3162570773-000,3M S60HS,0.3,1170.0,3696.112255038814,3706.4095714821674,215.90703034519777,False,all epoxy / glass-microballoon grades
+W2900342134-009,"3M Scotchlite S32/S38 glass microballoons, layer sequence S3",0.6,1930.0,4536.146916825539,4564.806156512037,135.0335190065046,False,all epoxy / glass-microballoon grades
+W2900342134-008,"3M Scotchlite S32/S38 glass microballoons, layer sequence S3",0.6,1918.0,4536.146916825539,4564.806156512037,136.50401026201976,False,all epoxy / glass-microballoon grades
+W2900342134-007,"3M Scotchlite K46/S22 glass microballoons, layer sequence K4",0.6,1826.0,4536.146916825539,4564.806156512037,148.41987496306348,False,all epoxy / glass-microballoon grades
+W2900342134-006,"3M Scotchlite K46/S22 glass microballoons, layer sequence S2",0.6,1842.0,4536.146916825539,4564.806156512037,146.2620476018208,False,all epoxy / glass-microballoon grades
+W2900342134-005,"3M Scotchlite glass microballoons (plain, single-layer foam ",0.6,585.7,4536.146916825539,4564.806156512037,674.4829975799111,False,all epoxy / glass-microballoon grades
+W2900342134-002,"3M Scotchlite S32/S38 glass microballoons, layer sequence S3",0.6,795.0,4536.146916825539,4564.806156512037,470.5845178396905,False,all epoxy / glass-microballoon grades
+W2900342134-003,"3M Scotchlite S32/S38 glass microballoons, layer sequence S3",0.6,783.9,4536.146916825539,4564.806156512037,478.6639771431993,False,all epoxy / glass-microballoon grades
+W2900342134-010,"3M Scotchlite K46/S22/S32/S38 glass microballoons, layer seq",0.6,1920.0,4536.146916825539,4564.806156512037,136.25765191799684,False,all epoxy / glass-microballoon grades
+W2900342134-001,"3M Scotchlite K46/S22 glass microballoons, layer sequence K4",0.6,722.7,4536.146916825539,4564.806156512037,527.6666551578163,False,all epoxy / glass-microballoon grades
+W2900342134-000,"3M Scotchlite K46/S22 glass microballoons, layer sequence S2",0.6,703.3,4536.146916825539,4564.806156512037,544.9803663906638,False,all epoxy / glass-microballoon grades
+W2900342134-004,"3M Scotchlite K46/S22/S32/S38 glass microballoons, layer seq",0.6,722.4,4536.146916825539,4564.806156512037,527.9273140677657,False,all epoxy / glass-microballoon grades
+W2900342134-011,"3M Scotchlite glass microballoons (plain, single-layer foam ",0.6,1181.0,4536.146916825539,4564.806156512037,284.09372708090933,False,all epoxy / glass-microballoon grades
+W2900342134-007,"3M Scotchlite K46/S22 glass microballoons, layer sequence K4",0.6,1826.0,4536.146916825539,4564.806156512037,148.41987496306348,False,K46 + other grades (layered / FGM - not comparable)
+W2900342134-006,"3M Scotchlite K46/S22 glass microballoons, layer sequence S2",0.6,1842.0,4536.146916825539,4564.806156512037,146.2620476018208,False,K46 + other grades (layered / FGM - not comparable)
+W2900342134-010,"3M Scotchlite K46/S22/S32/S38 glass microballoons, layer seq",0.6,1920.0,4536.146916825539,4564.806156512037,136.25765191799684,False,K46 + other grades (layered / FGM - not comparable)
+W2900342134-001,"3M Scotchlite K46/S22 glass microballoons, layer sequence K4",0.6,722.7,4536.146916825539,4564.806156512037,527.6666551578163,False,K46 + other grades (layered / FGM - not comparable)
+W2900342134-000,"3M Scotchlite K46/S22 glass microballoons, layer sequence S2",0.6,703.3,4536.146916825539,4564.806156512037,544.9803663906638,False,K46 + other grades (layered / FGM - not comparable)
+W2900342134-004,"3M Scotchlite K46/S22/S32/S38 glass microballoons, layer seq",0.6,722.4,4536.146916825539,4564.806156512037,527.9273140677657,False,K46 + other grades (layered / FGM - not comparable)

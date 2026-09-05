@@ -1,0 +1,50 @@
+{
+  "requested": {
+    "vf": 0.75,
+    "eta": 1.02,
+    "matrix": "epoxy",
+    "grade": "K46"
+  },
+  "well_posed": false,
+  "reasons": [
+    "vf=0.75 exceeds RCP=0.64 for monodisperse spheres",
+    "eta=1.02 is outside [0,1) - negative wall thickness",
+    "eta is determined by the K46 grade: 0.9356"
+  ],
+  "modulus_reported": null,
+  "k46_eta": 0.935570543253382,
+  "feasible_alternatives": [
+    {
+      "vf": 0.4,
+      "E_mt_mpa": 3958.0648616190583,
+      "E_ds_mpa": 3974.8143799325962,
+      "E_hs_lo": 3958.0648616190583,
+      "E_hs_hi": 4042.5663478809574,
+      "rho_g_cc": 0.8919999999999999
+    },
+    {
+      "vf": 0.5,
+      "E_mt_mpa": 4237.473198376684,
+      "E_ds_mpa": 4260.761928254537,
+      "E_hs_lo": 4237.473198376684,
+      "E_hs_hi": 4330.306235206621,
+      "rho_g_cc": 0.8199999999999998
+    },
+    {
+      "vf": 0.6,
+      "E_mt_mpa": 4536.146916825539,
+      "E_ds_mpa": 4564.806156512037,
+      "E_hs_lo": 4536.146916825539,
+      "E_hs_hi": 4630.283979214606,
+      "rho_g_cc": 0.7479999999999998
+    },
+    {
+      "vf": 0.64,
+      "E_mt_mpa": 4661.464366339879,
+      "E_ds_mpa": 4691.599838501308,
+      "E_hs_lo": 4661.464366339879,
+      "E_hs_hi": 4753.8800462517565,
+      "rho_g_cc": 0.7191999999999998
+    }
+  ]
+}

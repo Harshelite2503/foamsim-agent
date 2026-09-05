@@ -1,0 +1,91 @@
+==============================================================================
+0. PREMISE AND SELF-CHECKS
+==============================================================================
+matrix        : epoxy  E=3000 MPa  nu=0.35  rho=1.18 g/cm^3
+shell         : glass  E=60000 MPa  nu=0.21  rho=2.54 g/cm^3
+vf_max=0.6 vs random close packing RCP=0.64  -> OK (monodisperse-realisable)
+eta window [0.8, 0.97] is inside [0,1)  -> OK (eta>=1 would be impossible)
+vf=0 limit    : E=3000.0 MPa, rho=1.180 -> reproduces the neat matrix  OK
+HS containment: all HP-MT and HP-DS estimates inside HS bounds  OK (widest band = 39% of the estimate)
+feasibility   : max HS upper bound over the design box = 10729 MPa vs target 2500 MPa -> target is NOT above the bound, so it is not ruled out
+note          : the neat matrix already has E=3000 MPa >= 2500 MPa, so vf=0 (rho=1.180) is a trivially feasible point; the design problem is how much density
+                can be removed before the modulus drops through the target.
+
+==============================================================================
+1. DESIGN SWEEP  (8349 points: eta in [0.8,0.97], vf in [0,0.6])  -> sweep_grid.csv
+==============================================================================
+    density range  0.605 - 1.216 g/cm^3
+    E (HP-MT) range 2860 - 7831 MPa
+    feasible points (E_HP-MT >= 2500): 8349 / 8349
+
+==============================================================================
+2. OPTIMUM (continuous eta)
+==============================================================================
+  >> HP-MT optimum (primary design model):
+    eta = 0.9700   (particle true density 0.2218 g/cm^3, wall t/R = 0.0300, equivalent particle E = 2737 MPa)
+    vf  = 0.6000
+    composite density rho = 0.6051 g/cm^3   (48.7% lighter than neat epoxy)
+    E (HP-MT) = 2860.4 MPa    E (HP-DS) = 2860.5 MPa    nu = 0.270
+    HS band   = [2860.4, 2860.7] MPa -> both estimates inside: True
+    target 2500 MPa vs HS upper bound 2860.7 MPa -> feasible (target below the bound)
+    specific modulus E/rho = 4727 MPa/(g/cm^3)
+
+  >> HP-DS optimum (conservative cross-check model):
+    eta = 0.9700   (particle true density 0.2218 g/cm^3, wall t/R = 0.0300, equivalent particle E = 2737 MPa)
+    vf  = 0.6000
+    composite density rho = 0.6051 g/cm^3   (48.7% lighter than neat epoxy)
+    E (HP-MT) = 2860.4 MPa    E (HP-DS) = 2860.5 MPa    nu = 0.270
+    HS band   = [2860.4, 2860.7] MPa -> both estimates inside: True
+    target 2500 MPa vs HS upper bound 2860.7 MPa -> feasible (target below the bound)
+    specific modulus E/rho = 4727 MPa/(g/cm^3)
+
+==============================================================================
+3. BEST 3M GRADE (discrete alternative)
+==============================================================================
+grade    eta  particle_rho  in_eta_window  vf_max_feasible  rho_g_cc  E_mt_mpa  E_ds_mpa   E_hs_lo   E_hs_hi
+   K1 0.9833        0.1250          False           0.2814    0.8831 2500.0000 2494.4135 2458.8882 2500.0000
+  K15 0.9799        0.1500          False           0.3837    0.7848 2500.0000 2496.2481 2480.3506 2500.0000
+  K20 0.9730        0.2000          False           0.6000    0.5920 2680.5524 2680.0331 2678.8290 2680.5524
+  K25 0.9661        0.2500           True           0.6000    0.6220 3085.4481 3085.9300 3085.4481 3087.0622
+  S22 0.9703        0.2200          False           0.6000    0.6040 2845.6881 2845.7488 2845.6881 2845.8905
+  S32 0.9561        0.3200           True           0.6000    0.6640 3610.5544 3613.5300 3610.5544 3620.3221
+  S38 0.9474        0.3800           True           0.6000    0.7000 4026.0164 4035.9002 4026.0164 4058.3252
+  K46 0.9356        0.4600           True           0.6000    0.7480 4536.1469 4564.8062 4536.1469 4630.2840
+  S60 0.9141        0.6000           True           0.6000    0.8320 5326.0474 5416.2518 5326.0474 5628.0881
+
+  >> best grade inside the eta window: K25
+    eta = 0.9661   (particle true density 0.2500 g/cm^3, wall t/R = 0.0339, equivalent particle E = 3103 MPa)
+    vf  = 0.6000
+    composite density rho = 0.6220 g/cm^3   (47.3% lighter than neat epoxy)
+    E (HP-MT) = 3085.4 MPa    E (HP-DS) = 3085.9 MPa    nu = 0.270
+    HS band   = [3085.4, 3087.1] MPa -> both estimates inside: True
+    target 2500 MPa vs HS upper bound 3087.1 MPa -> feasible (target below the bound)
+    specific modulus E/rho = 4961 MPa/(g/cm^3)
+
+    (over ALL listed grades, ignoring the eta window, the lightest feasible is K20 at eta=0.9730, vf=0.6000, rho=0.5920 g/cm^3)
+
+==============================================================================
+4. TRADE-OFF CURVE: minimum density vs required modulus
+==============================================================================
+ E_required_mpa  min_rho_g_cc    eta     vf  E_achieved_mpa
+      1000.0000        0.6051 0.9700 0.6000       2860.4247
+      1250.0000        0.6051 0.9700 0.6000       2860.4247
+      1500.0000        0.6051 0.9700 0.6000       2860.4247
+      1750.0000        0.6051 0.9700 0.6000       2860.4247
+      2000.0000        0.6051 0.9700 0.6000       2860.4247
+      2250.0000        0.6051 0.9700 0.6000       2860.4247
+      2500.0000        0.6051 0.9700 0.6000       2860.4247
+      2750.0000        0.6051 0.9700 0.6000       2860.4247
+      3000.0000        0.6158 0.9675 0.6000       3004.0866
+  -> pareto_density_vs_modulus.csv
+  -> tradeoff_density_vs_modulus.png
+
+==============================================================================
+5. ANSWER
+==============================================================================
+  lightest design meeting E >= 2500 MPa (HP-MT):
+    eta = 0.9700 (t/R = 0.0300); vf = 0.6000; rho = 0.6051 g/cm^3; E = 2860.4 MPa
+    HS band at that point [2860, 2861] MPa -> estimate inside, target below the upper bound: feasible.
+  caveat: HP-MT is an idealised estimate; HP-DS is lower, and measured syntactic-foam moduli
+          typically fall 20-40% below HP-MT (matrix porosity, particle breakage, imperfect
+          bonding). Treat the optimum as an upper-bound-of-performance design point.

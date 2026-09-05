@@ -1,0 +1,5 @@
+{
+  "iterations": 2,
+  "notes": "Analytical sweep of epoxy/K46 compressive modulus over vf 0-0.60 (HP-MT, HP-DS, HS bounds) with vf=0-recovers-matrix and inside-HS-bounds self-checks, plus a FoamGPT experimental comparison. Second run added an honest split of the experimental subsets after the first run showed every K46-labelled record is a layered multi-grade FGM panel, not a monolithic epoxy+K46 foam.",
+  "pushback": false
+}

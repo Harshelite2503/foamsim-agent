@@ -1,0 +1,40 @@
+==============================================================================
+REQUEST: E of epoxy + 75 vol% monodisperse K46 microballoons, eta = 1.02
+VERDICT: ill-posed - the requested point does not exist. No modulus is reported for it.
+==============================================================================
+
+[1] Packing limit
+    requested vf = 0.75; random close packing of monodisperse spheres RCP = 0.64
+    foamsim raises: ValueError: vf=0.75 exceeds random close packing (0.64) of monodisperse spheres
+    -> 0.75 monodisperse spheres is geometrically impossible (FCC crystal max is 0.7405,
+       and a random monodisperse packing jams at ~0.64). Needs polydispersity, and even then
+       real syntactic foams stop near ~0.60-0.65 before the balloons crush during mixing.
+
+[2] Wall-thickness ratio eta = r_inner / r_outer
+    requested eta = 1.02; eta must lie in [0, 1)
+    foamsim raises: ValueError: eta must be in [0,1), got 1.02
+    -> eta > 1 means the inner radius exceeds the outer radius (negative wall). It would also
+       give a negative wall volume fraction 1 - eta^3 = -0.0612 and a negative density.
+    -> eta is also NOT free once the grade is fixed: K46 (true density 0.46 g/cm3 in borosilicate
+       glass, rho_s = 2.54 g/cm3) implies eta = 0.9356.
+
+[3] Closest well-posed calculations (self-consistent K46 eta, feasible vf)
+    self-check: vf=0 -> E = 3000.0 MPa = matrix E (3000.0 MPa). OK
+    vf=0.40  HP-MT E =  3958.1 MPa | HP-DS E =  3974.8 MPa | HS band [3958.1, 4042.6] MPa | rho = 0.892 g/cm3
+    vf=0.50  HP-MT E =  4237.5 MPa | HP-DS E =  4260.8 MPa | HS band [4237.5, 4330.3] MPa | rho = 0.820 g/cm3
+    vf=0.60  HP-MT E =  4536.1 MPa | HP-DS E =  4564.8 MPa | HS band [4536.1, 4630.3] MPa | rho = 0.748 g/cm3
+    vf=0.64  HP-MT E =  4661.5 MPa | HP-DS E =  4691.6 MPa | HS band [4661.5, 4753.9] MPa | rho = 0.719 g/cm3
+
+    Ceiling: at the packing limit vf = 0.64, epoxy/K46 gives E ~ 4661 MPa (HP-MT)
+    / 4692 MPa (HP-DS), rho ~ 0.719 g/cm3. Both models sit inside the HS band.
+    Experimental epoxy/glass-microballoon moduli typically fall 20-40% below HP-MT (matrix
+    porosity, balloon breakage), so treat these as upper estimates.
+
+[4] What to send back to the requester
+    - Fix eta: it follows from the grade (K46 -> eta = 0.9356); do not set it independently.
+      If a thinner wall is genuinely wanted, name a lighter grade (K20 -> eta ~ 0.966, K15, K1).
+    - Fix vf: pick vf <= 0.64 for monodisperse (<= ~0.55 to be packable in practice), or state
+      explicitly that the filler is polydisperse - then vf ~ 0.70 becomes arguable, but foamsim's
+      monodisperse models and packing routines are out of their validity range there.
+
+wrote result.json (no modulus reported for the requested point)

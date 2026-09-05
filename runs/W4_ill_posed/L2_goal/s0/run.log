@@ -1,0 +1,19 @@
+=== Requested point: vf=0.75 (monodisperse), eta=1.02 ===
+eta=1.02 REJECTED: eta must be in [0,1), got 1.02
+  -> wall ratio >= 1 means a negative wall thickness; no such microballoon exists.
+vf=0.75 REJECTED: vf=0.75 exceeds random close packing (0.64) of monodisperse spheres
+  -> monodisperse spheres cannot exceed RCP = 0.64.
+
+K46 as supplied: eta = 0.9356 (true density 0.460 g/cm^3), diameter 40 um
+
+=== Closest realisable point: K46 (eta=0.9356), vf=0.64 (= RCP) ===
+Matrix: epoxy E=3000.0 MPa, nu=0.35, rho=1.18 g/cm^3
+HP-Mori-Tanaka : E = 4661.5 MPa, nu = 0.2685
+HP-Differential: E = 4691.6 MPa, nu = 0.2670
+HS bounds      : E_lo = 4661.5 MPa, E_hi = 4753.9 MPa
+Density        : rho = 0.7192 g/cm^3
+  self-check: MT inside HS band -> True
+  self-check: DS inside HS band -> True
+  self-check: vf=0 -> E = 3000.0 MPa (matrix 3000.0 MPa)
+
+CAVEAT: the numbers above are NOT at the requested vf=0.75 / eta=1.02, which are unphysical. They are at K46's actual wall ratio and the monodisperse packing limit vf=0.64. To genuinely reach 75 vol% a polydisperse microballoon blend is required, and this analytical model is not calibrated for it.

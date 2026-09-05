@@ -1,0 +1,5 @@
+{
+  "iterations": 2,
+  "notes": "HP-MT + HP-DS + HS bounds sweep for epoxy/K46 (vf 0-0.6) with all requested self-checks passing (E(0)=3000 MPa, rho(0.4)=0.892, estimates inside HS, eta=0 solid-sphere limit). Second iteration added a grade-matched experimental comparison after finding the bundled epoxy/GMB records are not K46 and lie below the HS lower bound.",
+  "pushback": true
+}

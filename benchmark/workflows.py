@@ -16,14 +16,14 @@ WORKFLOWS = {
   "grade": {"E_vf0": 3000.0, "rho_vf04": 0.892, "E_vf04_range": [1800, 3600]},
  },
  "W2_inverse_design": {
-  "title": "Find the lightest epoxy/glass-microballoon foam with compressive modulus >= 2500 MPa",
+  "title": "Find the lightest epoxy/glass-microballoon foam with compressive modulus >= 3500 MPa",
   "science": "epoxy matrix as in W1; glass-microballoon wall ratio eta between 0.80 and 0.97 (or 3M grades K1..S60); "
              "particle volume fraction up to 0.60; use an analytical micromechanics model; report density and eta/grade.",
   "deliverable": "the optimal (eta or grade, vf), its density and modulus, the HS-bound feasibility check, and the "
                  "trade-off curve density vs modulus",
-  "reference_check": "solution must satisfy E >= 2500 MPa within the model used, respect vf <= 0.64, and be at or "
-                     "below 0.9 g/cm3 for a valid design",
-  "grade": {"E_min": 2500.0, "rho_max": 0.95, "vf_max": 0.64},
+  "reference_check": "E(vf=0) must equal 3000 MPa (below target, so the matrix alone is infeasible); the solution must "
+                     "satisfy E >= 3500 MPa within the model used and respect vf <= 0.64",
+  "grade": {"E_min": 3500.0, "rho_max": 1.0, "vf_max": 0.64},
  },
  "W3_fe_vs_analytical": {
   "title": "Numerical RVE homogenization vs analytical estimate for epoxy / K46 at 30 vol%",
