@@ -7,7 +7,7 @@ DRAFT v0.1 — August 2026
 
 # Abstract
 
-AI coding agents can turn a natural-language description of a simulation into runnable code, but whether the result is physically trustworthy is an open question. Recent work with GPU atomistic toolkits (NVIDIA ALCHEMI) found that prompt specificity changes code structure but not physics, and that agents never push back on ill-posed tasks. We ask the same questions in a domain with experimental rather than ab-initio ground truth: the micromechanics of syntactic foams (hollow microspheres in a polymer or metal matrix). We contribute (i) foamsim, a small validated toolkit — Hashin–Shtrikman bounds, hollow-particle Mori–Tanaka and differential schemes built on Hashin's exact hollow-sphere bulk modulus, random hollow-sphere RVE packing, voxel finite-element homogenization, and a bridge to the FoamGPT experimental dataset — with built-in admissibility guards; (ii) agent skills that document its API and a validation protocol; and (iii) a benchmark of four workflows (modulus–volume-fraction sweep, inverse design, FE-vs-analytical verification, and an ill-posed request) across five prompt-specificity levels, graded on code features, execution, and physics agreement. In 20 agent-generated pipelines (Claude Opus 5 via Claude Code), 15 executed and 20 passed the physics checks; every one of the 5 ill-posed runs pushed back — attributable to the toolkit's guards rather than the agent's judgment, since each cited the library's own exception. Prompt specificity again bought structure (reusability, interface contracts) at higher token and iteration cost, not correctness. The agents also surfaced a data finding: the available experimental compressive moduli for epoxy/glass-microballoon foams lie below the Hashin–Shtrikman lower bound, which no intact microstructure can produce, pointing to compliance-affected secant moduli, porosity, and particle breakage. We release the toolkit, skills, prompts, runs, and grader.
+AI coding agents can turn a natural-language description of a simulation into runnable code, but whether the result is physically trustworthy is an open question. Recent work with GPU atomistic toolkits (NVIDIA ALCHEMI) found that prompt specificity changes code structure but not physics, and that agents never push back on ill-posed tasks. We ask the same questions in a domain with experimental rather than ab-initio ground truth: the micromechanics of syntactic foams (hollow microspheres in a polymer or metal matrix). We contribute (i) foamsim, a small validated toolkit — Hashin–Shtrikman bounds, hollow-particle Mori–Tanaka and differential schemes built on Hashin's exact hollow-sphere bulk modulus, random hollow-sphere RVE packing, voxel finite-element homogenization, and a bridge to the FoamGPT experimental dataset — with built-in admissibility guards; (ii) agent skills that document its API and a validation protocol; and (iii) a benchmark of four workflows (modulus–volume-fraction sweep, inverse design, FE-vs-analytical verification, and an ill-posed request) across five prompt-specificity levels, graded on code features, execution, and physics agreement. In 20 agent-generated pipelines (Claude Opus 5 via Claude Code), 20 executed and 20 passed the physics checks; every one of the 5 ill-posed runs pushed back — attributable to the toolkit's guards rather than the agent's judgment, since each cited the library's own exception. Prompt specificity again bought structure (reusability, interface contracts) at higher token and iteration cost, not correctness. The agents also surfaced a data finding: the available experimental compressive moduli for epoxy/glass-microballoon foams lie below the Hashin–Shtrikman lower bound, which no intact microstructure can produce, pointing to compliance-affected secant moduli, porosity, and particle breakage. We release the toolkit, skills, prompts, runs, and grader.
 
 # 1. Introduction
 
@@ -62,17 +62,17 @@ Table 2. Per-cell grades (– = run pending).
 | W1 | contract | 1 | 1 | 0 | 4 | 431 | 1.5 | 1 | 1 |
 | W2 | sketch | 1 | 1 | 0 | 2 | 157 | 1.25 | 1 | 0 |
 | W2 | goal | 1 | 1 | 0 | 2 | 252 | 1.25 | 0 | 0 |
-| W2 | recipe | 0 | 1 | 0 | 1 | 306 | 1.25 | 1 | 0 |
+| W2 | recipe | 1 | 1 | 0 | 1 | 306 | 1.25 | 1 | 0 |
 | W2 | spec | 1 | 1 | 0 | 2 | 346 | 1.5 | 1 | 0 |
 | W2 | contract | 1 | 1 | 0 | 2 | 447 | 1.25 | 1 | 0 |
 | W3 | sketch | 1 | 1 | 1 | 1 | 102 | 1.5 | 0 | 0 |
-| W3 | goal | 0 | 1 | 1 | 2 | 148 | 1.25 | 0 | 0 |
-| W3 | recipe | 0 | 1 | 1 | 2 | 177 | 1.25 | 1 | 0 |
+| W3 | goal | 1 | 1 | 1 | 2 | 148 | 1.25 | 0 | 0 |
+| W3 | recipe | 1 | 1 | 1 | 2 | 177 | 1.25 | 1 | 0 |
 | W3 | spec | 1 | 1 | 1 | 2 | 295 | 1.5 | 1 | 0 |
 | W3 | contract | 1 | 1 | 1 | 3 | 295 | 1.25 | 1 | 0 |
 | W4 | sketch | 1 | 1 | 1 | 1 | 100 | 1.25 | 0 | 0 |
-| W4 | goal | 0 | 1 | 1 | 1 | 77 | 1.25 | 0 | 0 |
-| W4 | recipe | 0 | 1 | 1 | 1 | 129 | 1.25 | 0 | 0 |
+| W4 | goal | 1 | 1 | 1 | 1 | 77 | 1.25 | 0 | 0 |
+| W4 | recipe | 1 | 1 | 1 | 1 | 129 | 1.25 | 0 | 0 |
 | W4 | spec | 1 | 1 | 1 | 1 | 301 | 1.25 | 1 | 0 |
 | W4 | contract | 1 | 1 | 1 | 2 | 503 | 1.75 | 1 | 1 |
 
@@ -100,7 +100,7 @@ All five W2 runs found the same design (η ≈ 0.958, vf = 0.60, ρ ≈ 0.657 g/
 
 ## 5.4 FE-vs-analytical verification
 
-W3 runs: L1_sketch: ran=1, physics=1, rel. diff=0.03; L2_goal: ran=0, physics=1, rel. diff=–; L3_recipe: ran=0, physics=1, rel. diff=–; L4_spec: ran=1, physics=1, rel. diff=0.03; L5_contract: ran=1, physics=1, rel. diff=0.03.
+W3 runs: L1_sketch: ran=1, physics=1, rel. diff=0.03; L2_goal: ran=1, physics=1, rel. diff=–; L3_recipe: ran=1, physics=1, rel. diff=–; L4_spec: ran=1, physics=1, rel. diff=0.03; L5_contract: ran=1, physics=1, rel. diff=0.03.
 
 ## 5.5 What the experimental data can validate
 

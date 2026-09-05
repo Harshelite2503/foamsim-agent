@@ -135,7 +135,7 @@ def grade_all() -> pd.DataFrame:
         res_p = run / "results.json"; results = json.loads(res_p.read_text()) if res_p.exists() else None
         log = (run / "run.log").read_text() if (run / "run.log").exists() else ""
         meta = json.loads((run / "meta.json").read_text()) if (run / "meta.json").exists() else {}
-        row = {"workflow": wf, "level": level, "sample": sample, "has_script": int(bool(src)), "executed": int(results is not None or "OK" in log),
+        row = {"workflow": wf, "level": level, "sample": sample, "has_script": int(bool(src)), "executed": int(results is not None or bool(meta) or (bool(log) and "Traceback" not in log[-3000:])),
                "loc": len(src.splitlines()), **code_features(src, wf), **physics(wf, run, results, log), **{f"meta_{k}": v for k, v in meta.items()}}
         rows.append(row)
     df = pd.DataFrame(rows); df.to_csv(RUNS / "grades.csv", index=False); return df
